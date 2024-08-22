@@ -183,7 +183,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/22/20240822-burp%E4%BD%BF%E7%94%A8captcha-killer-modified%E6%8F%92%E4%BB%B6/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/22/20240822-20240822/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -197,7 +197,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/08/22/20240822-burp%E4%BD%BF%E7%94%A8captcha-killer-modified%E6%8F%92%E4%BB%B6/" class="post-title-link" itemprop="url">burp使用captcha-killer-modified插件</a>
+            <a href="/2024/08/22/20240822-20240822/" class="post-title-link" itemprop="url">burp使用captcha-killer-modified插件</a>
         </h2>
 
         <div class="post-meta">
@@ -208,7 +208,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2024-08-22 10:36:09 / Modified: 14:38:01" itemprop="dateCreated datePublished" datetime="2024-08-22T10:36:09+08:00">2024-08-22</time>
+              <time title="Created: 2024-08-22 14:51:09 / Modified: 14:56:37" itemprop="dateCreated datePublished" datetime="2024-08-22T14:51:09+08:00">2024-08-22</time>
             </span>
 
           <br>
@@ -237,15 +237,17 @@
 
       
           <h3 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h3><hr>
-<p>git clone <a target="_blank" rel="noopener" href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<img src="/11.jpg" alt="11"></p>
+<p>git clone <a target="_blank" rel="noopener" href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./11-1724309764333-1.jpg" alt="11"></p>
 <hr>
 <h3 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h3><hr>
-<p>pip install -i <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors .aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<img src="F:\hexo\myblog\source_posts\20240822\10.png" alt="10"><br>cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<img src="F:\hexo\myblog\source_posts\20240822\1.png" alt="1"></p>
+<p>pip install -i <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors .aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<img src="/./10.png" alt="10"><br>cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./1.png" alt="1"></p>
 <h3 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h3><hr>
-<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="F:\hexo\myblog\source_posts\20240822\12.png" alt="12"></p>
-<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="F:\hexo\myblog\source_posts\20240822\13.jpg" alt="13"><img src="F:\hexo\myblog\source_posts\20240822\4.png" alt="4"></p>
+<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./12.png" alt="12"></p>
+<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./13.jpg" alt="13"><img src="/./4.png" alt="4"></p>
 <h3 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h3><hr>
-<p>转到intruder模块attack type选择”Pitchfork”，username、password和verifyCode设置变量<br><img src="F:\hexo\myblog\source_posts\20240822\5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<img src="F:\hexo\myblog\source_posts\20240822\3.png" alt="3"><br>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<img src="F:\hexo\myblog\source_posts\20240822\7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="F:\hexo\myblog\source_posts\20240822\9.png" alt="9"></p>
+<p>转到intruder模块attack type选择”Pitchfork”，username、password和verifyCode设置变量<img src="/./5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<img src="/./3.png" alt="3"></p>
+<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<img src="/./7.png" alt="7"></p>
+<p>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./9-1724309778818-12.png" alt="9"></p>
 
       
     </div>
