@@ -20,15 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/tags/encryptAsDiary/index.html">
+  <meta name="description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="交换机hybrid接口配置">
+<meta property="og:url" content="http://example.com/2024/08/23/20240823-20240823/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/20240823/1724379466071.jpg">
+<meta property="og:image" content="http://example.com/images/20240823/1724380480187.jpg">
+<meta property="article:published_time" content="2024-08-23T01:38:22.000Z">
+<meta property="article:modified_time" content="2024-08-23T03:33:05.835Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/20240823/1724379466071.jpg">
 
-<link rel="canonical" href="http://example.com/tags/encryptAsDiary/">
+<link rel="canonical" href="http://example.com/2024/08/23/20240823-20240823/">
 
 
 <script id="page-configurations">
@@ -36,12 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: encryptAsDiary | Hexo</title>
+  <title>交换机hybrid接口配置 | Hexo</title>
   
 
 
@@ -177,51 +184,116 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">encryptAsDiary
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/20240823-20240823/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          交换机hybrid接口配置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-08-23 09:38:22 / 修改时间：11:33:05" itemprop="dateCreated datePublished" datetime="2024-08-23T09:38:22+08:00">2024-08-23</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+            <div class="post-description">配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0/24网段做了映射，那么当交换机收到的是源ip是10.10.10.0/24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子网的 VLAN 划分方式即可将源自</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
+        <h1 id="配置基于IP子网划分VLAN示例"><a href="#配置基于IP子网划分VLAN示例" class="headerlink" title="配置基于IP子网划分VLAN示例"></a>配置基于IP子网划分VLAN示例</h1><p>基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。</p>
+<p>使用基于子网的 VLAN 划分方式即可将源自不同子网主机的上行流量送入对应 VLAN，并将来自受允许的 VLAN 的流量根据 MAC 表 untag 发送到对应的边缘端口，实现对主机和傻瓜交换机透明的（也就是不带 tag 的）一端口多 VLAN。</p>
+<p>客户需求：<br>    智能交换机不够了，只有傻瓜交换机，而且傻瓜交换机下连接不同VLAN的业务，需要傻瓜交换机下接的不同业务的设备网络能通，或者电脑能通不同业务的网络，方便运维。<br>拓扑图：</p>
+<p><img src="/./images/20240823/1724379466071.jpg" alt="1724379466071"></p>
+<h1 id="华为交换机配置"><a href="#华为交换机配置" class="headerlink" title="华为交换机配置"></a>华为交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[LSW1]interface Gi0/0/2</span><br><span class="line">[LSW1]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW1]port trunk allow-pass vlan all</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid untagged vlan 116 120 //对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br></pre></td></tr></table></figure>
+
+<p>下连电脑不通试着配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[LSW4]port hybrid pvid vlan 116</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./images/20240823/1724380480187.jpg" alt="1724380480187"></p>
+<h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid 116 120 untagged//对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 116</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 120</span><br></pre></td></tr></table></figure>
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2024-08-21T15:44:25+08:00"
-              content="2024-08-21">
-          08-21
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/08/21/123/" itemprop="url">
-            <span itemprop="name">123</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/08/22/20240822-20240822/" rel="prev" title="burp使用captcha-killer-modified插件">
+      <i class="fa fa-chevron-left"></i> burp使用captcha-killer-modified插件
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -274,6 +346,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%9F%BA%E4%BA%8EIP%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86VLAN%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">配置基于IP子网划分VLAN示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8E%E4%B8%BA%E4%BA%A4%E6%8D%A2%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">华为交换机配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">华三交换机配置</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

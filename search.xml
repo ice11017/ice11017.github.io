@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>123</title>
+    <url>/2024/08/21/123/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="33a6a72fc290513fea553c0f52fc7b20ba10d9d3bc5e05f5e46a8b058277ab5a">4630436162ade97ba2718b7d0c4b3b63fe08207cb62f17de1c1df0858f7d75759c08cb94437e9d69d05dfcb58d1cf4cf</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>encryptAsDiary</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>华三交换机同步ntp</title>
     <url>/2024/08/22/%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
     <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
@@ -25,6 +44,29 @@
 ]]></content>
   </entry>
   <entry>
+    <title>交换机hybrid接口配置</title>
+    <url>/2024/08/23/20240823-20240823/</url>
+    <content><![CDATA[<h1 id="配置基于IP子网划分VLAN示例"><a href="#配置基于IP子网划分VLAN示例" class="headerlink" title="配置基于IP子网划分VLAN示例"></a>配置基于IP子网划分VLAN示例</h1><p>基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。</p>
+<p>使用基于子网的 VLAN 划分方式即可将源自不同子网主机的上行流量送入对应 VLAN，并将来自受允许的 VLAN 的流量根据 MAC 表 untag 发送到对应的边缘端口，实现对主机和傻瓜交换机透明的（也就是不带 tag 的）一端口多 VLAN。</p>
+<p>客户需求：<br>    智能交换机不够了，只有傻瓜交换机，而且傻瓜交换机下连接不同VLAN的业务，需要傻瓜交换机下接的不同业务的设备网络能通，或者电脑能通不同业务的网络，方便运维。<br>拓扑图：</p>
+<p><img src="/./images/20240823/1724379466071.jpg" alt="1724379466071"></p>
+<h1 id="华为交换机配置"><a href="#华为交换机配置" class="headerlink" title="华为交换机配置"></a>华为交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW1]interface Gi0/0/2</span><br><span class="line">[LSW1]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW1]port trunk allow-pass vlan all</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid untagged vlan 116 120 //对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br></pre></td></tr></table></figure>
+
+<p>下连电脑不通试着配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]port hybrid pvid vlan 116</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./images/20240823/1724380480187.jpg" alt="1724380480187"></p>
+<h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid 116 120 untagged//对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 116</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 120</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>burp使用captcha-killer-modified插件</title>
     <url>/2024/08/22/20240822-20240822/</url>
     <content><![CDATA[<h3 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h3><hr>
@@ -39,24 +81,5 @@
 <p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
 <p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>123</title>
-    <url>/2024/08/21/123/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="33a6a72fc290513fea553c0f52fc7b20ba10d9d3bc5e05f5e46a8b058277ab5a">4630436162ade97ba2718b7d0c4b3b63fe08207cb62f17de1c1df0858f7d75759c08cb94437e9d69d05dfcb58d1cf4cf</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>encryptAsDiary</tag>
-      </tags>
   </entry>
 </search>
