@@ -38,6 +38,12 @@
 ]]></content>
   </entry>
   <entry>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
+]]></content>
+  </entry>
+  <entry>
     <title>burp使用captcha-killer-modified插件</title>
     <url>/2024/08/22/20240822-20240822/</url>
     <content><![CDATA[<h3 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h3><hr>
@@ -51,12 +57,6 @@
 <h3 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h3><hr>
 <p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
 <p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
 ]]></content>
   </entry>
   <entry>
