@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子">
+  <meta name="description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。  使用基">
 <meta property="og:type" content="article">
 <meta property="og:title" content="交换机hybrid接口配置">
 <meta property="og:url" content="http://example.com/2024/08/23/20240823-20240823/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子">
+<meta property="og:description" content="配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0&#x2F;24网段做了映射，那么当交换机收到的是源ip是10.10.10.0&#x2F;24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。  使用基">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/20240823/1724379466071.jpg">
 <meta property="og:image" content="http://example.com/images/20240823/1724380480187.jpg">
 <meta property="article:published_time" content="2024-08-23T01:38:22.000Z">
-<meta property="article:modified_time" content="2024-08-23T03:33:05.835Z">
+<meta property="article:modified_time" content="2024-08-23T03:58:47.146Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/20240823/1724379466071.jpg">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-08-23 09:38:22 / 修改时间：11:33:05" itemprop="dateCreated datePublished" datetime="2024-08-23T09:38:22+08:00">2024-08-23</time>
+              <time title="创建时间：2024-08-23 09:38:22 / 修改时间：11:58:47" itemprop="dateCreated datePublished" datetime="2024-08-23T09:38:22+08:00">2024-08-23</time>
             </span>
 
           
@@ -240,7 +240,6 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
-            <div class="post-description">配置基于IP子网划分VLAN示例 基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0/24网段做了映射，那么当交换机收到的是源ip是10.10.10.0/24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。使用基于子网的 VLAN 划分方式即可将源自</div>
 
         </div>
       </header>
