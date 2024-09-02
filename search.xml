@@ -20,30 +20,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/08/21/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
-]]></content>
-  </entry>
-  <entry>
     <title>burp使用captcha-killer-modified插件</title>
     <url>/2024/08/22/20240822-20240822/</url>
     <content><![CDATA[<h3 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h3><hr>
@@ -80,6 +56,45 @@
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid 116 120 untagged//对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 116</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 120</span><br></pre></td></tr></table></figure>
 
+]]></content>
+  </entry>
+  <entry>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>不常见问题</title>
+    <url>/2024/09/02/20240902-1-20240902/</url>
+    <content><![CDATA[<h1 id="CentOS-7-telnet目标服务器秒断开"><a href="#CentOS-7-telnet目标服务器秒断开" class="headerlink" title="CentOS 7 telnet目标服务器秒断开"></a>CentOS 7 telnet目标服务器秒断开</h1><hr>
+<p><img src="/./images/20240902/111.png" alt="111"><br>现象：telnet后立刻被拒绝Connetion closed by foreign host<br>网闸映射端口内网地址x.x.x.x 1521 — 192.168.22.122 2182 反馈端口秒断开不通，数据库端口测试不通。</p>
+<p>原因：经测试端口是通的，操作错误。</p>
+<h1 id="CentOS-7-ping丢包"><a href="#CentOS-7-ping丢包" class="headerlink" title="CentOS 7 ping丢包"></a>CentOS 7 ping丢包</h1><hr>
+<p>现象：执行ping命令时提示ping: sendmsg: Operation not permitted<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;34 ttl&#x3D;255 time&#x3D;0.928 ms<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;35 ttl&#x3D;255 time&#x3D;1.01 ms<br>ping: sendmsg: Operation not permitted<br>ping: sendmsg: Operation not permitted<br>显示只丢部分报文</p>
+<p>原因：防火墙没关</p>
+<h1 id="华为esight接口做链路聚合后不通"><a href="#华为esight接口做链路聚合后不通" class="headerlink" title="华为esight接口做链路聚合后不通"></a>华为esight接口做链路聚合后不通</h1><hr>
+<p>现象：对端交换机上配置了动态链路聚合，显示聚合端口down，esight ping网关不通。</p>
+<p>原因：esight上需要修改聚合口的模式为802.3ad<br><img src="/./images/20240902/1725244127200.png" alt="1725244127200"></p>
+<h1 id="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"><a href="#两台浪潮交换机做MLAG，其中一个上联口显示DOWN" class="headerlink" title="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"></a>两台浪潮交换机做MLAG，其中一个上联口显示DOWN</h1><hr>
+<p>现象：检查交换机的上联口光纤和光模块正常，其中一个接口DOWN。</p>
+<p>原因：两台交换机上联口配置不一致导致接口自动shutdown，配置更改一致后需要手动开启no shutdown。<img src="/./images/20240902/3605eb4eb3c4528a0b8bf36715cc2a9.png" alt="3605eb4eb3c4528a0b8bf36715cc2a9"></p>
+<p><img src="/./images/20240902/c0ec97a24bea2a7cc5949bee8277ab3.png" alt="c0ec97a24bea2a7cc5949bee8277ab3"><br><img src="/./images/20240902/f72141ebd7dac73516305722db90693.png" alt="f72141ebd7dac73516305722db90693"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>RedHat 8.7设置本地yum源</title>
+    <url>/2024/09/02/20240902-2-20240902/</url>
+    <content><![CDATA[<h1 id="RedHat-8-7最小功能安装，很多命令无法使用"><a href="#RedHat-8-7最小功能安装，很多命令无法使用" class="headerlink" title="RedHat 8.7最小功能安装，很多命令无法使用"></a>RedHat 8.7最小功能安装，很多命令无法使用</h1><hr>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">mkdir cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom --挂载镜像文件到cdrom</span><br><span class="line">echo &quot;/dev/cdrom /mnt/cdrom iso9660 defaults,nofail 0 0&quot; --可以设置开机自动挂载</span><br><span class="line">rm -rf /etc/yum.repos.d/* --删除原来的源地址文件也可以备份一份出来放到其他文件夹</span><br><span class="line">touch /etc/yum.repos.d/local.repo --新建repo文件</span><br><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum list</span><br></pre></td></tr></table></figure>
+
+<p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
+<h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
+<p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
 ]]></content>
   </entry>
 </search>
