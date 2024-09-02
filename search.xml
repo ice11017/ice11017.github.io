@@ -61,7 +61,15 @@
   <entry>
     <title>华三交换机同步ntp</title>
     <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service refclock-master 2</code><br>其他的汇聚交换机和楼层交换机从核心交换机同步时间<br><code>[Switch]ntp-service enable</code><br><code>[Switch]ntp-service unicast-server 1.0.1.11</code><br><code>display ntp status</code><br>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置<br><code>[Switch] undo clock pro</code><br><code>[Switch] clock timezone beijing add 8</code></p>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
+
+<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
+
 ]]></content>
   </entry>
   <entry>
@@ -79,7 +87,13 @@
 <h1 id="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"><a href="#两台浪潮交换机做MLAG，其中一个上联口显示DOWN" class="headerlink" title="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"></a>两台浪潮交换机做MLAG，其中一个上联口显示DOWN</h1><hr>
 <p>现象：检查交换机的上联口光纤和光模块正常，其中一个接口DOWN。</p>
 <p>原因：两台交换机上联口配置不一致导致接口自动shutdown，配置更改一致后需要手动开启no shutdown。<img src="/./images/20240902/3605eb4eb3c4528a0b8bf36715cc2a9.png" alt="3605eb4eb3c4528a0b8bf36715cc2a9"></p>
-<p><img src="/./images/20240902/c0ec97a24bea2a7cc5949bee8277ab3.png" alt="c0ec97a24bea2a7cc5949bee8277ab3"><br><img src="/./images/20240902/f72141ebd7dac73516305722db90693.png" alt="f72141ebd7dac73516305722db90693"></p>
+<p><img src="/./images/20240902/c0ec97a24bea2a7cc5949bee8277ab3.png" alt="c0ec97a24bea2a7cc5949bee8277ab3"><img src="/./images/20240902/f72141ebd7dac73516305722db90693.png" alt="f72141ebd7dac73516305722db90693"></p>
+<h1 id="华为设备配置单臂路由时网络不通"><a href="#华为设备配置单臂路由时网络不通" class="headerlink" title="华为设备配置单臂路由时网络不通"></a>华为设备配置单臂路由时网络不通</h1><hr>
+<p>现象：华为的设备配置子接口，配置ip后网络不通<br>原因：当IP报文需要从终结子接口发出，但是没有相应的ARP表项时，如果终结子接口上没有配置ARP广播功能，那么系统会直接把该IP报文丢弃。只有通过在子接口上执行命令arp broadcast enable使能终结子接口的ARP广播功能，系统才会构造带Tag的ARP广播报文，然后再从该终结子接口发出</p>
+<p>如果终结子接口上没有配置arp broadcast enable命令，那么系统会直接把该IP报文丢弃。此时该终结子接口的路由可以看作是黑洞路由。<br>如果终结子接口上配置了arp broadcast enable命令，那么系统会构造带Tag的ARP广播报文，然后再从该终结子接口发出。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet0/0/0.20</span><br><span class="line"> dot1q termination vid 20</span><br><span class="line"> ip address 192.168.20.1 255.255.255.0 </span><br><span class="line"> arp broadcast enable </span><br></pre></td></tr></table></figure>
+
+<p>华三设备不需要配置arp broadcast enable</p>
 ]]></content>
   </entry>
   <entry>
@@ -95,6 +109,25 @@
 <p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
 <h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
 <p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>交换机和服务器上抓报</title>
+    <url>/2024/09/02/20240902-3-20240902/</url>
+    <content><![CDATA[<h1 id="华为交换机上抓报"><a href="#华为交换机上抓报" class="headerlink" title="华为交换机上抓报"></a>华为交换机上抓报</h1><hr>
+<p>华为交换机上能抓业务报文，华三的应该不行。<br><img src="/./images/20240902/1725264901397.png" alt="1725264901397"><img src="/./images/20240902/1725265230648.png" alt="1725265230648"><img src="/./images/20240902/1725265007019.png" alt="1725265007019"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[switch]diagnose</span><br><span class="line">[switch-dianose]capture-packet acl 3000 interface eth-trunk destination terminal file test.cap packet-num 100 packet-info </span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="华三交换机上抓报"><a href="#华三交换机上抓报" class="headerlink" title="华三交换机上抓报"></a>华三交换机上抓报</h1><hr>
+<p>由于特性包报文捕获只能捕获通过CPU进行软件转发的报文，如需捕获通过硬件转发的报文，则需要配置流镜像功能，将符合条件的硬件转发报文镜像到CPU，以便进行捕获。</p>
+<h1 id="服务器上抓报"><a href="#服务器上抓报" class="headerlink" title="服务器上抓报"></a>服务器上抓报</h1><hr>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tcpdump -i eth0 port 1521 host 192.168.1.1 or src net 172.16.0.0/12 -nnev -c 200 -s0 -w /data/test.cap</span><br></pre></td></tr></table></figure>
+
+<p>使用tcpdump进行抓报</p>
+<p><code>-i</code> : 选择要捕获的接口，通常是以太网卡或无线网卡，也可以是 vlan 或其他特殊接口。如果该系统上只有一个网络接口，则无需指定。<br><code>-nn </code>: 单个 n 表示不解析域名，直接显示 IP；两个 n 表示不解析域名和端口。这样不仅方便查看 IP 和端口号，而且在抓取大量数据时非常高效，因为域名解析会降低抓取速度。<br><code>-s0</code>: tcpdump 默认只会截取前 96 字节的内容，要想截取所有的报文内容，可以使用 -s number， number 就是你要截取的报文字节数，如果是 0 的话，表示截取报文全部内容。<br><code>-v</code>: 使用 -v，-vv 和 -vvv 来显示更多的详细信息，通常会显示更多与特定协议相关的信息。<br><code>-e</code>: 显示数据链路层信息。默认情况下 tcpdump 不会显示数据链路层信息，使用 -e 选项可以显示源和目的 MAC 地址，以及 VLAN tag 信息。<br><code>-c</code>: 捕获 count 个包 tcpdump 就退出<br> <code>-w</code>: 参数后接一个以 <code>.pcap</code> 后缀命令的文件名，就可以将 tcpdump 抓到的数据保存到文件中。使用 wireshark 打开此文件便可进行分析<br><code>and</code>: 所有的条件都需要满足，也可以表示为 <code>&amp;&amp;</code><br><code>or</code>: 只要有一个条件满足就可以，也可以表示为 <code>||</code><br><code>not</code>: 取反，也可以使用 <code>!</code><br><code>net</code>: Network 过滤器用来过滤某个网段的数据</p>
+<h1 id="抓APP的报"><a href="#抓APP的报" class="headerlink" title="抓APP的报"></a>抓APP的报</h1><hr>
 ]]></content>
   </entry>
 </search>
