@@ -20,17 +20,19 @@
       </tags>
   </entry>
   <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
-
-<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
-
-<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
-
+    <title>burp使用captcha-killer-modified插件</title>
+    <url>/2024/08/22/20240822-20240822/</url>
+    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
+<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
+<hr>
+<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
+<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
+<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
+<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
+<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
+<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
+<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
+<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
 ]]></content>
   </entry>
   <entry>
@@ -57,19 +59,17 @@
 ]]></content>
   </entry>
   <entry>
-    <title>burp使用captcha-killer-modified插件</title>
-    <url>/2024/08/22/20240822-20240822/</url>
-    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
-<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
-<hr>
-<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
-<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
-<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
-<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
-<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
-<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
-<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
-<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
+
+<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
+
 ]]></content>
   </entry>
   <entry>
@@ -85,6 +85,30 @@
 <p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
 <h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
 <p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>不常见问题</title>
+    <url>/2024/09/02/20240902-1-20240902/</url>
+    <content><![CDATA[<h1 id="CentOS-7-telnet目标服务器秒断开"><a href="#CentOS-7-telnet目标服务器秒断开" class="headerlink" title="CentOS 7 telnet目标服务器秒断开"></a>CentOS 7 telnet目标服务器秒断开</h1><hr>
+<p><img src="/./images/20240902/111.png" alt="111"><br>现象：telnet后立刻被拒绝Connetion closed by foreign host<br>网闸映射端口内网地址x.x.x.x 1521 — 192.168.22.122 2182 反馈端口秒断开不通，数据库端口测试不通。</p>
+<p>原因：经测试端口是通的，操作错误。</p>
+<h1 id="CentOS-7-ping丢包"><a href="#CentOS-7-ping丢包" class="headerlink" title="CentOS 7 ping丢包"></a>CentOS 7 ping丢包</h1><hr>
+<p>现象：执行ping命令时提示ping: sendmsg: Operation not permitted<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;34 ttl&#x3D;255 time&#x3D;0.928 ms<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;35 ttl&#x3D;255 time&#x3D;1.01 ms<br>ping: sendmsg: Operation not permitted<br>ping: sendmsg: Operation not permitted<br>显示只丢部分报文</p>
+<p>原因：防火墙没关</p>
+<h1 id="华为esight接口做链路聚合后不通"><a href="#华为esight接口做链路聚合后不通" class="headerlink" title="华为esight接口做链路聚合后不通"></a>华为esight接口做链路聚合后不通</h1><hr>
+<p>现象：对端交换机上配置了动态链路聚合，显示聚合端口down，esight ping网关不通。</p>
+<p>原因：esight上需要修改聚合口的模式为802.3ad<br><img src="/./images/20240902/1725244127200.png" alt="1725244127200"></p>
+<h1 id="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"><a href="#两台浪潮交换机做MLAG，其中一个上联口显示DOWN" class="headerlink" title="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"></a>两台浪潮交换机做MLAG，其中一个上联口显示DOWN</h1><hr>
+<p>现象：检查交换机的上联口光纤和光模块正常，其中一个接口DOWN。</p>
+<p>原因：两台交换机上联口配置不一致导致接口自动shutdown，配置更改一致后需要手动开启no shutdown。<img src="/./images/20240902/3605eb4eb3c4528a0b8bf36715cc2a9.png" alt="3605eb4eb3c4528a0b8bf36715cc2a9"></p>
+<p><img src="/./images/20240902/c0ec97a24bea2a7cc5949bee8277ab3.png" alt="c0ec97a24bea2a7cc5949bee8277ab3"><img src="/./images/20240902/f72141ebd7dac73516305722db90693.png" alt="f72141ebd7dac73516305722db90693"></p>
+<h1 id="华为设备配置单臂路由时网络不通"><a href="#华为设备配置单臂路由时网络不通" class="headerlink" title="华为设备配置单臂路由时网络不通"></a>华为设备配置单臂路由时网络不通</h1><hr>
+<p>现象：华为的设备配置子接口，配置ip后网络不通<br>原因：当IP报文需要从终结子接口发出，但是没有相应的ARP表项时，如果终结子接口上没有配置ARP广播功能，那么系统会直接把该IP报文丢弃。只有通过在子接口上执行命令arp broadcast enable使能终结子接口的ARP广播功能，系统才会构造带Tag的ARP广播报文，然后再从该终结子接口发出</p>
+<p>如果终结子接口上没有配置arp broadcast enable命令，那么系统会直接把该IP报文丢弃。此时该终结子接口的路由可以看作是黑洞路由。<br>如果终结子接口上配置了arp broadcast enable命令，那么系统会构造带Tag的ARP广播报文，然后再从该终结子接口发出。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet0/0/0.20</span><br><span class="line"> dot1q termination vid 20</span><br><span class="line"> ip address 192.168.20.1 255.255.255.0 </span><br><span class="line"> arp broadcast enable </span><br></pre></td></tr></table></figure>
+
+<p>华三设备不需要配置arp broadcast enable</p>
 ]]></content>
   </entry>
   <entry>
@@ -113,30 +137,6 @@
 <p><img src="/./images/20240902/3.jpg" alt="3"></p>
 <p><img src="/./images/20240902/9.jpg" alt="9"></p>
 <p>那么安装之后就可以进行抓取 APP 数据包了<br><img src="/./images/20240902/image-20240903102245838.png" alt="image-20240903102245838"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>不常见问题</title>
-    <url>/2024/09/02/20240902-1-20240902/</url>
-    <content><![CDATA[<h1 id="CentOS-7-telnet目标服务器秒断开"><a href="#CentOS-7-telnet目标服务器秒断开" class="headerlink" title="CentOS 7 telnet目标服务器秒断开"></a>CentOS 7 telnet目标服务器秒断开</h1><hr>
-<p><img src="/./images/20240902/111.png" alt="111"><br>现象：telnet后立刻被拒绝Connetion closed by foreign host<br>网闸映射端口内网地址x.x.x.x 1521 — 192.168.22.122 2182 反馈端口秒断开不通，数据库端口测试不通。</p>
-<p>原因：经测试端口是通的，操作错误。</p>
-<h1 id="CentOS-7-ping丢包"><a href="#CentOS-7-ping丢包" class="headerlink" title="CentOS 7 ping丢包"></a>CentOS 7 ping丢包</h1><hr>
-<p>现象：执行ping命令时提示ping: sendmsg: Operation not permitted<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;34 ttl&#x3D;255 time&#x3D;0.928 ms<br>64 bytes from 10.1.1.1: icmp_seq&#x3D;35 ttl&#x3D;255 time&#x3D;1.01 ms<br>ping: sendmsg: Operation not permitted<br>ping: sendmsg: Operation not permitted<br>显示只丢部分报文</p>
-<p>原因：防火墙没关</p>
-<h1 id="华为esight接口做链路聚合后不通"><a href="#华为esight接口做链路聚合后不通" class="headerlink" title="华为esight接口做链路聚合后不通"></a>华为esight接口做链路聚合后不通</h1><hr>
-<p>现象：对端交换机上配置了动态链路聚合，显示聚合端口down，esight ping网关不通。</p>
-<p>原因：esight上需要修改聚合口的模式为802.3ad<br><img src="/./images/20240902/1725244127200.png" alt="1725244127200"></p>
-<h1 id="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"><a href="#两台浪潮交换机做MLAG，其中一个上联口显示DOWN" class="headerlink" title="两台浪潮交换机做MLAG，其中一个上联口显示DOWN"></a>两台浪潮交换机做MLAG，其中一个上联口显示DOWN</h1><hr>
-<p>现象：检查交换机的上联口光纤和光模块正常，其中一个接口DOWN。</p>
-<p>原因：两台交换机上联口配置不一致导致接口自动shutdown，配置更改一致后需要手动开启no shutdown。<img src="/./images/20240902/3605eb4eb3c4528a0b8bf36715cc2a9.png" alt="3605eb4eb3c4528a0b8bf36715cc2a9"></p>
-<p><img src="/./images/20240902/c0ec97a24bea2a7cc5949bee8277ab3.png" alt="c0ec97a24bea2a7cc5949bee8277ab3"><img src="/./images/20240902/f72141ebd7dac73516305722db90693.png" alt="f72141ebd7dac73516305722db90693"></p>
-<h1 id="华为设备配置单臂路由时网络不通"><a href="#华为设备配置单臂路由时网络不通" class="headerlink" title="华为设备配置单臂路由时网络不通"></a>华为设备配置单臂路由时网络不通</h1><hr>
-<p>现象：华为的设备配置子接口，配置ip后网络不通<br>原因：当IP报文需要从终结子接口发出，但是没有相应的ARP表项时，如果终结子接口上没有配置ARP广播功能，那么系统会直接把该IP报文丢弃。只有通过在子接口上执行命令arp broadcast enable使能终结子接口的ARP广播功能，系统才会构造带Tag的ARP广播报文，然后再从该终结子接口发出</p>
-<p>如果终结子接口上没有配置arp broadcast enable命令，那么系统会直接把该IP报文丢弃。此时该终结子接口的路由可以看作是黑洞路由。<br>如果终结子接口上配置了arp broadcast enable命令，那么系统会构造带Tag的ARP广播报文，然后再从该终结子接口发出。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet0/0/0.20</span><br><span class="line"> dot1q termination vid 20</span><br><span class="line"> ip address 192.168.20.1 255.255.255.0 </span><br><span class="line"> arp broadcast enable </span><br></pre></td></tr></table></figure>
-
-<p>华三设备不需要配置arp broadcast enable</p>
 ]]></content>
   </entry>
 </search>
