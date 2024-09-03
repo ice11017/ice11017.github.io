@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
+
+<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>123</title>
     <url>/2024/08/21/123/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
@@ -55,20 +69,6 @@
 <h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid 116 120 untagged//对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 116</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 120</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
-
-<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
-
-<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
