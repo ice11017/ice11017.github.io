@@ -29,7 +29,7 @@
 <p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors .aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
 <h3 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h3><hr>
 <p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
-<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"></p>
+<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><br><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
 <h3 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h3><hr>
 <p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
 <p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
