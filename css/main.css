@@ -993,7 +993,7 @@ pre .javascript .function {
 .site-subtitle {
   color: #dcdcdc;
   font-size: 0.8125em;
-  margin: 10px 0;
+  margin: 0px 0;
 }
 .use-motion .brand {
   opacity: 0;
@@ -1043,7 +1043,7 @@ pre .javascript .function {
 .menu {
   margin-top: 20px;
   padding-left: 0;
-  text-align: center;
+  text-align: right;
 }
 .menu-item {
   display: inline-block;
@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #9fffdf;
+  background: #7c9eb1;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1411,7 +1411,7 @@ pre .javascript .function {
   width: 100%;
 }
 .with-love {
-  color: #ff0000;
+  color: ;
   display: inline-block;
   margin: 0 5px;
 }
