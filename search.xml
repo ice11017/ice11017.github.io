@@ -76,6 +76,7 @@
     <title>虚拟化集群和存储双活</title>
     <url>/2024/09/05/20240905-20240905/</url>
     <content><![CDATA[<h1 id="虚拟化集群和存储双活："><a href="#虚拟化集群和存储双活：" class="headerlink" title="虚拟化集群和存储双活："></a>虚拟化集群和存储双活：</h1><hr>
+<p>传统集中式存储采用控制器+硬盘柜的方式，通过冗余的双控制器提供数据管理和读写能力（也有超过2个控制器的多控存储，多见于高端存储），通过控制器自带的硬盘槽位或扩展硬盘柜提供存储空间。<br>集中式存储的硬盘数据保护多采用RAID技术，比如RAID5、RAID6、RAID10、RAID-TP等。<br>分布式存储为了实现更灵活的扩展性和更大的存储规模，采用无中心的组网方式，每个存储节点都可以同时提供计算和存储资源。它们通过内部交换机互联起来，基于分布式存储软件提供统一的存储资源池。比如1个节点是200TB容量，那么5个节点就是1000TB容量，并可以扩展到数千个节点EB级别的容量，所以更适合用在海量数据的场景下。<br>与集中式存储不同的是，分布式存储的硬盘数据保护多采用多副本和纠删码技术。</p>
 <p>设备：两台华为集中式存储，四台光纤存储交换机，两台业务交换机，十台服务器。<br>每台存储有19块3.84TB的硬盘做raid6，实际可使用空间50.698TB。<br>光纤存储交换机端口和模块是16GB的，FC组网，10台服务器做VMware vSphere集群，仲裁服务器用集群里面的虚拟机做。</p>
 <p>拓扑图：</p>
 <p><img src="/./images/20240905/download.png" alt="download"><br><img src="/./images/20240905/image-20240905094456773.png" alt="image-20240905094456773"></p>
@@ -104,13 +105,13 @@
 </tr>
 <tr>
 <td>ESXI01</td>
-<td><img src="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image010.png" alt="img"></td>
+<td><img src="/./images/20240905/image-20240918091022669.png" alt="image-20240918091022669"></td>
 <td>ESXI06</td>
 <td><img src="/./images/20240905/clip_image008.png" alt="img"></td>
 </tr>
 <tr>
 <td>ESXI02</td>
-<td><img src="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image014.png" alt="img"></td>
+<td><img src="/./images/20240905/image-20240918091035978.png" alt="image-20240918091035978"></td>
 <td>ESXI07</td>
 <td><img src="/./images/20240905/clip_image012.png" alt="img"></td>
 </tr>
@@ -241,13 +242,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>存储双活</title>
-    <url>/2024/09/04/20240904-2-20240904-2/</url>
-    <content><![CDATA[<p>   传统集中式存储采用控制器+硬盘柜的方式，通过冗余的双控制器提供数据管理和读写能力（也有超过2个控制器的多控存储，多见于高端存储），通过控制器自带的硬盘槽位或扩展硬盘柜提供存储空间。</p>
-<p>   集中式存储的硬盘数据保护多采用RAID技术，比如RAID5、RAID6、RAID10、RAID-TP等。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>堡垒机常用操作</title>
     <url>/2024/09/04/20240904-1-20240904-1/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
@@ -265,5 +259,10 @@
       <tags>
         <tag>encryptAsDiary</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>终端接入认证</title>
+    <url>/2024/09/18/20240918-20240918/</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>

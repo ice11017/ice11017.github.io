@@ -20,21 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="虚拟化集群和存储双活：    设备：两台华为集中式存储，四台光纤存储交换机，两台业务交换机，十台服务器。 每台存储有19块3.84TB的硬盘做raid6，实际可使用空间50.698TB。 光纤存储交换机端口和模块是16GB的，FC组网，10台服务器做VMware vSphere集群，仲裁服务器用集群里面的虚拟机做。  拓扑图：     整体连线：    每台服务器有两张HBA卡，两张以太网卡，还有">
+  <meta name="description" content="虚拟化集群和存储双活：    传统集中式存储采用控制器+硬盘柜的方式，通过冗余的双控制器提供数据管理和读写能力（也有超过2个控制器的多控存储，多见于高端存储），通过控制器自带的硬盘槽位或扩展硬盘柜提供存储空间。 集中式存储的硬盘数据保护多采用RAID技术，比如RAID5、RAID6、RAID10、RAID-TP等。 分布式存储为了实现更灵活的扩展性和更大的存储规模，采用无中心的组网方式，每个存储节">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚拟化集群和存储双活">
 <meta property="og:url" content="http://example.com/2024/09/05/20240905-20240905/index.html">
 <meta property="og:site_name" content="tomato&#39;s blog">
-<meta property="og:description" content="虚拟化集群和存储双活：    设备：两台华为集中式存储，四台光纤存储交换机，两台业务交换机，十台服务器。 每台存储有19块3.84TB的硬盘做raid6，实际可使用空间50.698TB。 光纤存储交换机端口和模块是16GB的，FC组网，10台服务器做VMware vSphere集群，仲裁服务器用集群里面的虚拟机做。  拓扑图：     整体连线：    每台服务器有两张HBA卡，两张以太网卡，还有">
+<meta property="og:description" content="虚拟化集群和存储双活：    传统集中式存储采用控制器+硬盘柜的方式，通过冗余的双控制器提供数据管理和读写能力（也有超过2个控制器的多控存储，多见于高端存储），通过控制器自带的硬盘槽位或扩展硬盘柜提供存储空间。 集中式存储的硬盘数据保护多采用RAID技术，比如RAID5、RAID6、RAID10、RAID-TP等。 分布式存储为了实现更灵活的扩展性和更大的存储规模，采用无中心的组网方式，每个存储节">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/20240905/download.png">
 <meta property="og:image" content="http://example.com/images/20240905/image-20240905094456773.png">
 <meta property="og:image" content="http://example.com/images/20240905/image-20240905164131522.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image007.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image004.png">
-<meta property="og:image" content="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image010.png">
+<meta property="og:image" content="http://example.com/images/20240905/image-20240918091022669.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image008.png">
-<meta property="og:image" content="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image014.png">
+<meta property="og:image" content="http://example.com/images/20240905/image-20240918091035978.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image012.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image018.png">
 <meta property="og:image" content="http://example.com/images/20240905/clip_image016.png">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="http://example.com/images/20240905/1725522393668.png">
 <meta property="og:image" content="http://example.com/images/20240905/1725523347366.png">
 <meta property="article:published_time" content="2024-09-05T01:34:27.000Z">
-<meta property="article:modified_time" content="2024-09-05T09:55:58.954Z">
+<meta property="article:modified_time" content="2024-09-18T01:13:51.308Z">
 <meta property="article:author" content="tomato">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/20240905/download.png">
@@ -244,10 +244,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-09-05 09:34:27 / 修改时间：17:55:58" itemprop="dateCreated datePublished" datetime="2024-09-05T09:34:27+08:00">2024-09-05</time>
+              <time title="创建时间：2024-09-05 09:34:27" itemprop="dateCreated datePublished" datetime="2024-09-05T09:34:27+08:00">2024-09-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-18 09:13:51" itemprop="dateModified" datetime="2024-09-18T09:13:51+08:00">2024-09-18</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -262,14 +268,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -282,6 +288,7 @@
 
       
         <h1 id="虚拟化集群和存储双活："><a href="#虚拟化集群和存储双活：" class="headerlink" title="虚拟化集群和存储双活："></a>虚拟化集群和存储双活：</h1><hr>
+<p>传统集中式存储采用控制器+硬盘柜的方式，通过冗余的双控制器提供数据管理和读写能力（也有超过2个控制器的多控存储，多见于高端存储），通过控制器自带的硬盘槽位或扩展硬盘柜提供存储空间。<br>集中式存储的硬盘数据保护多采用RAID技术，比如RAID5、RAID6、RAID10、RAID-TP等。<br>分布式存储为了实现更灵活的扩展性和更大的存储规模，采用无中心的组网方式，每个存储节点都可以同时提供计算和存储资源。它们通过内部交换机互联起来，基于分布式存储软件提供统一的存储资源池。比如1个节点是200TB容量，那么5个节点就是1000TB容量，并可以扩展到数千个节点EB级别的容量，所以更适合用在海量数据的场景下。<br>与集中式存储不同的是，分布式存储的硬盘数据保护多采用多副本和纠删码技术。</p>
 <p>设备：两台华为集中式存储，四台光纤存储交换机，两台业务交换机，十台服务器。<br>每台存储有19块3.84TB的硬盘做raid6，实际可使用空间50.698TB。<br>光纤存储交换机端口和模块是16GB的，FC组网，10台服务器做VMware vSphere集群，仲裁服务器用集群里面的虚拟机做。</p>
 <p>拓扑图：</p>
 <p><img src="/./images/20240905/download.png" alt="download"><br><img src="/./images/20240905/image-20240905094456773.png" alt="image-20240905094456773"></p>
@@ -310,13 +317,13 @@
 </tr>
 <tr>
 <td>ESXI01</td>
-<td><img src="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image010.png" alt="img"></td>
+<td><img src="/./images/20240905/image-20240918091022669.png" alt="image-20240918091022669"></td>
 <td>ESXI06</td>
 <td><img src="/./images/20240905/clip_image008.png" alt="img"></td>
 </tr>
 <tr>
 <td>ESXI02</td>
-<td><img src="file:///C:/Users/lyy/AppData/Local/Temp/msohtmlclip1/01/clip_image014.png" alt="img"></td>
+<td><img src="/./images/20240905/image-20240918091035978.png" alt="image-20240918091035978"></td>
 <td>ESXI07</td>
 <td><img src="/./images/20240905/clip_image012.png" alt="img"></td>
 </tr>
@@ -392,10 +399,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/09/04/20240904-2-20240904-2/" rel="prev" title="存储双活">
-      <i class="fa fa-chevron-left"></i> 存储双活
+    <a href="/2024/09/04/20240904-1-20240904-1/" rel="prev" title="堡垒机常用操作">
+      <i class="fa fa-chevron-left"></i> 堡垒机常用操作
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/09/18/20240918-20240918/" rel="next" title="终端接入认证">
+      终端接入认证 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
