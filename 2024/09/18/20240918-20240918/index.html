@@ -20,15 +20,31 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="802.1X+AD域用户认证    设备：深信服全网行为管理AC  全网AC配置    配置核心要点：   1. 需要使用全网AC，支持802.1x对接  2. 在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)  3. 创建本地用户（或者关联LDAP）并添加用户绑定关系  4. 使用802.1x工具生成交换机配置并刷入交换机  5. 交">
+<meta property="og:type" content="article">
 <meta property="og:title" content="终端接入认证">
 <meta property="og:url" content="http://example.com/2024/09/18/20240918-20240918/index.html">
 <meta property="og:site_name" content="tomato&#39;s blog">
+<meta property="og:description" content="802.1X+AD域用户认证    设备：深信服全网行为管理AC  全网AC配置    配置核心要点：   1. 需要使用全网AC，支持802.1x对接  2. 在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)  3. 创建本地用户（或者关联LDAP）并添加用户绑定关系  4. 使用802.1x工具生成交换机配置并刷入交换机  5. 交">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/20240918/1726708823572.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919093517940.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919093641873.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919094047439.png">
+<meta property="og:image" content="http://example.com/images/20240918/1726709888642.png">
+<meta property="og:image" content="http://example.com/images/20240918/1726711666898.jpg">
+<meta property="og:image" content="http://example.com/images/20240918/1726710158624.png">
+<meta property="og:image" content="http://example.com/images/20240918/1726710313482.png">
+<meta property="og:image" content="http://example.com/images/20240918/1726710396805.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919094844075.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919100500107.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919100858653.png">
+<meta property="og:image" content="http://example.com/images/20240918/image-20240919100958984.png">
 <meta property="article:published_time" content="2024-09-18T01:14:45.000Z">
-<meta property="article:modified_time" content="2024-09-18T01:14:45.019Z">
+<meta property="article:modified_time" content="2024-09-19T02:10:01.724Z">
 <meta property="article:author" content="tomato">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/20240918/1726708823572.png">
 
 <link rel="canonical" href="http://example.com/2024/09/18/20240918-20240918/">
 
@@ -211,6 +227,13 @@
 
               <time title="创建时间：2024-09-18 09:14:45" itemprop="dateCreated datePublished" datetime="2024-09-18T09:14:45+08:00">2024-09-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-19 10:10:01" itemprop="dateModified" datetime="2024-09-19T10:10:01+08:00">2024-09-19</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -225,14 +248,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -244,7 +267,71 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="802-1X-AD域用户认证"><a href="#802-1X-AD域用户认证" class="headerlink" title="802.1X+AD域用户认证"></a>802.1X+AD域用户认证</h1><hr>
+<p>设备：深信服全网行为管理AC</p>
+<h2 id="全网AC配置"><a href="#全网AC配置" class="headerlink" title="全网AC配置"></a>全网AC配置</h2><hr>
+<p><strong>配置核心要点</strong>：</p>
+<ol>
+<li>需要使用全网AC，支持802.1x对接</li>
+<li>在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)</li>
+<li>创建本地用户（或者关联LDAP）并添加用户绑定关系</li>
+<li>使用802.1x工具生成交换机配置并刷入交换机</li>
+<li>交换机配置SNMP，AC开启跨三层取MAC进行对接</li>
+<li>绑定用户和MAC实现哑终端mac免认证</li>
+<li>使用测试电脑接入验证</li>
+</ol>
+<p><img src="/./images/20240918/1726708823572.png" alt="1726708823572"></p>
+<p><img src="/./images/20240918/image-20240919093517940.png" alt="image-20240919093517940"><br><img src="/./images/20240918/image-20240919093641873.png" alt="image-20240919093641873"><img src="/./images/20240918/image-20240919094047439.png" alt="image-20240919094047439"></p>
+<p><img src="/./images/20240918/1726709888642.png" alt="1726709888642"></p>
+<p>全网行为管理AC同一个用户最多可以绑定100条用户绑定信息<br><img src="/./images/20240918/1726711666898.jpg" alt="1726711666898"></p>
+<h2 id="交换机配置"><a href="#交换机配置" class="headerlink" title="交换机配置"></a>交换机配置</h2><hr>
+<p>交换机型号华为S5735S</p>
+<p>配置思路：<br>1.创建aaa方案并配置认证方式和计费方式为radius<br>2.创建并配置radius服务器模板的各项参数<br>3.创建认证域并在其上绑定aaa认证方案和计费方案与radius服务器模板<br>4.配置全局默认域<br>5.配置接口开启802.1X认证</p>
+<p>step1：创建并配置RADIUS服务器模板“sangfor_rd”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;HUAWEI&gt;system-view                                //进入系统视图</span><br><span class="line">[HUAWEI] radius-server template sangfor_rd         //创建radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server authentication 192.168.254.100 1812 //设置radius服务器的认证IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server accounting 192.168.254.100 1813     //设置radius服务器的计费IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server shared-key cipher 123456     //设置接入设备与radius认证服务器的共享密钥</span><br><span class="line">[HUAWEI-radius-sangfor_rd] quit</span><br></pre></td></tr></table></figure>
+
+<p>step2：创建AAA认证方案“sangfor_aaa”并配置认证方式为RADIUS。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI] aaa</span><br><span class="line">[HUAWEI-aaa] authentication-scheme sangfor_aaa	            //创建aaa认证方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] authentication-mode radius	//配置当前认证方案使用的认证模式</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] quit</span><br><span class="line">[HUAWEI-aaa]accounting-scheme sangfor_aaa		            //创建aaa计费方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]accounting-mode radius	//配置当前使用的计费模式“radius”</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]quit</span><br></pre></td></tr></table></figure>
+
+<p>step3：创建认证域“sangforAD”，并在其上绑定AAA认证方案“sangfor_aaa”与RADIUS服务器模板“sangfor_rd”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI-aaa] domain sangforAD								      //创建认证域“sangforAD”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] authentication-scheme sangfor_aaa	  //在域下绑定aaa认证方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] accounting-scheme sangfor_aaa		  //在域下绑定aaa计费方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] radius-server sangfor_rd			  //在认证域下绑定radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] quit</span><br><span class="line">[HUAWEI-aaa] quit</span><br></pre></td></tr></table></figure>
+
+<p>指定全局默认域, 全局默认域只能配置一个多次配置会被覆盖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI]domain sangfor_AD                                 //配置全局默认域为“sangfor_AD”</span><br></pre></td></tr></table></figure>
+
+<p>step4：配置802.1X认证（可选）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">配置802.1X接入模板“sangfor_ap”，802.1X接入模板默认采用EAP认证方式。请确保RADIUS服务器支持EAP协议，否则无法处理802.1X认证请求。</span><br><span class="line">[HUAWEI] dot1x-access-profile name sangfor_ap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] dot1x authentication-method eap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] quit</span><br></pre></td></tr></table></figure>
+
+<p>step5：配置认证模板“sangfor_apf”，并在其上绑定802.1X接入模板“sangfor_ap”、指定认证模板下用户的强制认证域为“sangforAD”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] dot1x-access-profile sangfor_ap</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] access-domain sangforAD force       配置端口802.1x强制使用的认证域，如果不配则使用全局默认域</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
+
+<p>step6：配置MAC认证<br>配置MAC接入模板，MAC认证用户的用户名和密码默认均为不带分隔符“-”的MAC地址。需要保证RADIUS服务器上配置的MAC用户名和密码格式与接入设备上的保持一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI] mac-access-profile name m1     //创建mac 认证模板</span><br><span class="line">[HUAWEI-mac-access-profile-m1] mac-authen username macaddress format with-hyphen	//设置用户名为xx-xx-xx-xx-xx-xx 的mac地址形式</span><br><span class="line">[HUAWEI-mac-access-profile-m1] quit</span><br><span class="line">[HUAWEI]dot1x timer mac-bypass-delay 30    //配置接入设备802.1x无响应多久后做mab认证</span><br><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] mac-access-profile m1</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] authentication dot1x-mac-bypass   //启用MAC旁路认证</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
+
+<p>step7：在接口GE0&#x2F;0&#x2F;48上绑定认证模板“sangfor_apf”，使能802.1X认证。以接口GE0&#x2F;0&#x2F;48为例，其他接口配置与其类似。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI] interface gigabitethernet 0/0/48</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] authentication-profile sangfor_apf</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] quit</span><br></pre></td></tr></table></figure>
+
+<p>step8：配置免认证访问ip<br>NAC认证用户在认证成功之前，无法访问网络。通过配置免认证规则（free-rule）可以使特定的用户无需通过Portal认证即可访问网络中的特定资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[HUAWEI] free-rule-template name default_free_rule</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 1 destination ip 10.11.12.13 mask 255.255.255.255 //域控ip，方便域控下发准入插件</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 2 destination ip 11.12.13.14 mask 255.255.255.255</span><br></pre></td></tr></table></figure>
+
+<p>step9：防止AC挂掉，所有终端会断网</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">authentication event authen-server-down action authorize keep no-response  //配置用户在认证服务器Down时保持原有的网络访问权限。</span><br><span class="line">authentication event authen-server-noreply action authorize keep no-response  //配置用户在认证服务器无响应时保持原有的网络访问权限。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="域控配置"><a href="#域控配置" class="headerlink" title="域控配置"></a>域控配置</h2><hr>
+<p>配置思路：</p>
+<ol>
+<li>下载MSI安装包</li>
+<li>域控上面创建组策略</li>
+<li>添加需要下发的安装包并分配权限</li>
+<li>域单点登录用户登录后会自动安装.msi软件</li>
+</ol>
+<p><img src="/./images/20240918/1726710158624.png" alt="1726710158624"><br><img src="/./images/20240918/1726710313482.png" alt="1726710313482"></p>
+<p>右键编辑，选择软件安装，将.msi的安装包添加进去，来源要填ip加路径。<br><img src="/./images/20240918/1726710396805.png" alt="1726710396805"><br><img src="/./images/20240918/image-20240919094844075.png" alt="image-20240919094844075"><br>权限：<br>Domain user (所有域成员)<br>Domain admin (域管理员)<br>Authenticated Users (Windows系统中所有使用用户名、密码登录并通过身份验证的账户，不包括来宾账户Guest)</p>
+<h1 id="检测杀毒软件安装之后才能上网"><a href="#检测杀毒软件安装之后才能上网" class="headerlink" title="检测杀毒软件安装之后才能上网"></a>检测杀毒软件安装之后才能上网</h1><hr>
+<p><img src="/./images/20240918/image-20240919100500107.png" alt="image-20240919100500107"><img src="/./images/20240918/image-20240919100858653.png" alt="image-20240919100858653"><br><img src="/./images/20240918/image-20240919100958984.png" alt="image-20240919100958984"></p>
+
     </div>
 
     
@@ -321,6 +408,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#802-1X-AD%E5%9F%9F%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81"><span class="nav-number">1.</span> <span class="nav-text">802.1X+AD域用户认证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E7%BD%91AC%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">全网AC配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">交换机配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%9F%E6%8E%A7%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">域控配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E6%9D%80%E6%AF%92%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E4%B9%8B%E5%90%8E%E6%89%8D%E8%83%BD%E4%B8%8A%E7%BD%91"><span class="nav-number">2.</span> <span class="nav-text">检测杀毒软件安装之后才能上网</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -375,12 +463,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">8k</span>
+    <span title="站点总字数">12k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
 </div>
 
 <!--

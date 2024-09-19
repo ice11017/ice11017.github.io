@@ -209,6 +209,13 @@
 
               <time title="创建时间：2024-09-18 09:14:45" itemprop="dateCreated datePublished" datetime="2024-09-18T09:14:45+08:00">2024-09-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-09-19 10:10:01" itemprop="dateModified" datetime="2024-09-19T10:10:01+08:00">2024-09-19</time>
+              </span>
 
           
             <span class="post-meta-item" title="本文字数">
@@ -216,14 +223,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -235,7 +242,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          802.1X+AD域用户认证
+
+
+
+设备：深信服全网行为管理AC
+
+全网AC配置
+
+
+
+配置核心要点：
+
+ 1. 需要使用全网AC，支持802.1x对接
+ 2. 在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)
+ 3. 创建本地用户（或者关联LDAP）并添加用户绑定关系
+ 4. 使用802.1x工具生成交换机配置并刷入交换机
+ 5. 交换机配置SNMP，AC开启跨三层取MAC进行对接
+ 6. 绑定用户和MAC实现哑终端mac免认证
+ 7. 使用测试电脑接入验证
+
+
+
+
+
+
+
+
+全网行为管理AC同一个用户最多可以绑定100条用户绑定信
+          <!--noindex-->
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1171,12 +1208,12 @@ pip install -i http://mirrors.aliyun.com/pypi/simple/ –trusted host mirrors.al
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">8k</span>
+    <span title="站点总字数">12k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
 </div>
 
 <!--
