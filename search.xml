@@ -338,6 +338,9 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">查看密码有效期</span><br><span class="line">chage -l root</span><br><span class="line">强制用户下次登陆修改密码，并且设置密码最高有效期90，提前30天发警报提示</span><br><span class="line">chage -d 0 -M 90 -W 30 root</span><br></pre></td></tr></table></figure>
 
 <h1 id="配置登录失败策略和登录超时时间"><a href="#配置登录失败策略和登录超时时间" class="headerlink" title="配置登录失败策略和登录超时时间"></a>配置登录失败策略和登录超时时间</h1><p><img src="/./images/20241028/image-20241028174636484.png" alt="image-20241028174636484"></p>
+<h2 id="配置登录30分钟不操作自动退出"><a href="#配置登录30分钟不操作自动退出" class="headerlink" title="配置登录30分钟不操作自动退出"></a>配置登录30分钟不操作自动退出</h2><p>修改&#x2F;etc的profile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line">在最后面添加一行export TMOUT=1800</span><br><span class="line">保存后执行source /etc/profile</span><br></pre></td></tr></table></figure>
+
 <h2 id="配置登录失败10次，锁3分钟"><a href="#配置登录失败10次，锁3分钟" class="headerlink" title="配置登录失败10次，锁3分钟"></a>配置登录失败10次，锁3分钟</h2><p>修改&#x2F;etc&#x2F;ssh里的sshd.conf文件</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd.conf</span><br><span class="line">userpam yes</span><br></pre></td></tr></table></figure>
 
@@ -361,6 +364,43 @@
 
 <h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">针对设备的用户做密码策略，也可以对某一个用户做策略</span><br><span class="line">[H3c]password-control enable</span><br><span class="line">[H3c]password-control aging 90</span><br><span class="line">[H3c]password-control change-password first-login enabless</span><br><span class="line">[H3c]password-control length 8</span><br><span class="line">[H3c]password-control login idle-time 30  //30天未登录设备，锁定账号</span><br><span class="line">[H3c]password-control complexity same-character check  //开启在配置的密码中检查包含连续三个或以上相同字符的功能</span><br><span class="line">[H3c]ssh server enable</span><br><span class="line">[H3c]local-user admin</span><br><span class="line">[H3c-luser-admin]password simple admin12345</span><br><span class="line">[H3c-luser-admin]server type ssh</span><br><span class="line">[H3c]line vty 0 4</span><br><span class="line">[H3c]authentication-mode scheme</span><br><span class="line">[H3c]protocol inbound ssh</span><br><span class="line">[H3c-line-vty0-4]user-role network-admin</span><br><span class="line">[H3c-line-vty0-4]user-role network-operator</span><br><span class="line">[H3c-line-vty0-4]idle-timeout 10 0     //10分钟不操作自动退出</span><br><span class="line">[H3c]display password-control  //检查配置</span><br><span class="line">[H3c]acl 2001</span><br><span class="line">[H3c]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[H3c]ssh server acl 2001</span><br></pre></td></tr></table></figure>
 
+]]></content>
+  </entry>
+  <entry>
+    <title>RedHat8安装openssl3.3.2和openssh9.9p1</title>
+    <url>/2024/10/31/20241031-20241031/</url>
+    <content><![CDATA[<h1 id="安装openssl3-3-2"><a href="#安装openssl3-3-2" class="headerlink" title="安装openssl3.3.2"></a>安装openssl3.3.2</h1><p>   ssh -V 查看当前openssl和openssh的版本</p>
+<ol>
+<li><p>不联网的服务器需要设置本地源安装依赖<br>挂载服务器镜像mount &#x2F;dev&#x2F;sr0 &#x2F;mnt&#x2F;cdrom<br><img src="/./images/20241031/1730340085846.png" alt="1730340012366"><br>创建并修改镜像文件local.repo</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/local.repo</span><br><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
+
+<p>修改完后输入<br>yum clean all  更新镜像<br>yum makecache  生成缓存<br><img src="/./images/20241031/image-20241031100734370.png" alt="image-20241031100734370"></p>
+</li>
+<li><p>安装依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y perl-Pod-Html perl-IPC-Cmd gcc zlib zlib-devel pam-devel pcre pcre-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压并安装openssl</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf openssl-3.3.2.tar.gz</span><br><span class="line">cd openssl-3.3.2w</span><br><span class="line">mkdir -p /usr/openssh/openssl3.3.2</span><br><span class="line">./config --prefix=/usr/openssh/openssl3.3.2</span><br><span class="line"> make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建新版本软链接</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -s /usr/local/openssl/bin/openssl /usr/bin/</span><br><span class="line">ln -s /usr/local/openssl/lib64/libssl.so.3 /usr/lib64/</span><br><span class="line">ln -s /usr/local/openssl/lib64/libcrypto.so.3 /usr/lib64/</span><br><span class="line"># ln -s /usr/local/openssl/include/openssl /usr/include/openssl</span><br><span class="line">echo &quot;/usr/local/openssl/lib64&quot; &gt;&gt; /etc/ld.so.conf.d/ssl.conf</span><br><span class="line">ldconfig -v</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入ssh -V 验证安装是否成功<br><img src="/./images/20241031/image-20241031101754080.png" alt="image-20241031101754080"></p>
+</li>
+</ol>
+<h1 id="安装openssh9-9p1"><a href="#安装openssh9-9p1" class="headerlink" title="安装openssh9.9p1"></a>安装openssh9.9p1</h1><ol>
+<li><p>卸载旧版本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#卸载旧版本</span><br><span class="line">service sshd stop</span><br><span class="line">yum remove -y openssh</span><br><span class="line">#清理残余文件</span><br><span class="line">rm -rf /etc/ssh/*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开始安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd  /usr/local</span><br><span class="line">tar -xzvf openssh-9.8p1.tar.gz</span><br><span class="line">chown -R root.root openssh-9.8p1</span><br><span class="line">cd openssh-9.8p1</span><br><span class="line">./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --without-openssl-header-check --with-pam --with-privsep-path=/var/lib/sshd --with-md5-passwords --with-zlib=/usr/local/src/zlib</span><br><span class="line">make -j 4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装完成</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#查看目录版本 /usr/local/openssh/bin/ssh -V</span><br><span class="line">#复制启动文件到/etc/init.d/下并命名为sshd</span><br><span class="line">cp -p contrib/redhat/sshd.init /etc/init.d/sshd</span><br><span class="line">cp -a contrib/redhat/sshd.pam /etc/pam.d/sshd.pam</span><br><span class="line">cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd</span><br><span class="line">cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh</span><br><span class="line">cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen</span><br><span class="line"></span><br><span class="line">#允许root登录</span><br><span class="line">echo &#x27;PermitRootLogin yes&#x27; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line">echo &#x27;PasswordAuthentication yes&#x27; &gt;&gt; /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line">#重启sshd服务</span><br><span class="line">/etc/init.d/sshd restart</span><br><span class="line">#查看服务运行状态</span><br><span class="line">/etc/init.d/sshd status</span><br><span class="line">#添加开机启动</span><br><span class="line">chkconfig --add sshd</span><br></pre></td></tr></table></figure>
+
+<p>查看升级后ssh版本 ssh -V<br><img src="/./images/20241031/image-20241031102917423.png" alt="image-20241031102917423"></p>
+</li>
+</ol>
 ]]></content>
   </entry>
 </search>
