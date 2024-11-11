@@ -183,6 +183,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/11/20241111-20241111/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tomato">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tomato's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/11/20241111-20241111/" class="post-title-link" itemprop="url">负载均衡AD常用配置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-11-11 10:48:19 / 修改时间：15:25:39" itemprop="dateCreated datePublished" datetime="2024-11-11T10:48:19+08:00">2024-11-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>633</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          负载均衡AD常用配置
+部署配置
+AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。
+
+
+配置源NAT
+
+
+配置目的nat
+网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT
+
+双向映射配置源NAT
+
+
+链路负载
+链路负载-智能路由，链路策略选择带宽比例或者加权最小流量
+
+
+应用负载
+配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。
+
+ 1. 添加业务主机
+
+          <!--noindex-->
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/31/20241031-20241031/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1063,84 +1160,6 @@ CentOS 7 ping丢包
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/20240823-20240823/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="tomato">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="tomato's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/08/23/20240823-20240823/" class="post-title-link" itemprop="url">交换机hybrid接口配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-08-23 09:38:22 / 修改时间：15:18:53" itemprop="dateCreated datePublished" datetime="2024-08-23T09:38:22+08:00">2024-08-23</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          配置基于IP子网划分VLAN示例
-基于IP子网划分VLAN的原理是网络管理者预先配置IP地址和VLAN ID映射关系表，根据数据帧中的源IP地址和子网掩码来划分VLAN，比如把VLAN10 和10.10.10.0/24网段做了映射，那么当交换机收到的是源ip是10.10.10.0/24网段的地址数据，就依据映射关系将数据帧添加指定VLAN10的标签。然后数据帧将在指定VLAN10中传输。
-
-使用基于子网的 VLAN 划分方式即可将源自不同子网主机的上行流量送入对应 VLAN，并将来自受允许的 VLAN 的流量根据 MAC 表 untag 发送到对应的边缘端口，实现对主机和傻瓜交换机透明的（也就
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1209,7 +1228,7 @@ CentOS 7 ping丢包
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1255,7 +1274,7 @@ CentOS 7 ping丢包
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">18 分钟</span>
+    <span title="站点阅读时长">19 分钟</span>
 </div>
 
 <!--

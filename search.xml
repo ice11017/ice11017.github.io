@@ -412,4 +412,34 @@
 <p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>负载均衡AD常用配置</title>
+    <url>/2024/11/11/20241111-20241111/</url>
+    <content><![CDATA[<h1 id="负载均衡AD常用配置"><a href="#负载均衡AD常用配置" class="headerlink" title="负载均衡AD常用配置"></a>负载均衡AD常用配置</h1><h2 id="部署配置"><a href="#部署配置" class="headerlink" title="部署配置"></a>部署配置</h2><p>AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。<br><img src="/./images/20241111/1731296098201.png" alt="1731296098201"></p>
+<h2 id="配置源NAT"><a href="#配置源NAT" class="headerlink" title="配置源NAT"></a>配置源NAT</h2><p><img src="/./images/20241111/image-20241111113639676.png" alt="image-20241111113639676"></p>
+<h2 id="配置目的nat"><a href="#配置目的nat" class="headerlink" title="配置目的nat"></a>配置目的nat</h2><p>网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT<br><img src="/./images/20241111/image-20241111114339043.png" alt="image-20241111114339043"><br>双向映射配置源NAT<br><img src="/./images/20241111/image-20241111114551419.png" alt="image-20241111114551419"></p>
+<h2 id="链路负载"><a href="#链路负载" class="headerlink" title="链路负载"></a>链路负载</h2><p>链路负载-智能路由，链路策略选择带宽比例或者加权最小流量<br><img src="/./images/20241111/1731296338531.png" alt="1731296338531"></p>
+<h2 id="应用负载"><a href="#应用负载" class="headerlink" title="应用负载"></a>应用负载</h2><p>配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。</p>
+<ol>
+<li><p>添加业务主机</p>
+<p>添加业务主机，填写内网服务器IP，选择ping来检测<img src="/./images/20241111/image-20241111152511246.png" alt="image-20241111152511246"></p>
+</li>
+<li><p>添加节点池<br>应用负载-节点池，添加节点池，填写内网服务器IP和端口。</p>
+<p><img src="/./images/20241111/image-20241111151327175.png" alt="image-20241111151327175"></p>
+</li>
+<li><p>配置虚拟服务</p>
+<p>一般用于灵活配置流量转发、业务高可用、安全防护，如根据业务数据灵活转发流量；<br>如业务流量过大，一台服务器无法承受时对业务进行扩容；如通过健康检查机制保证<br>业务高可用；如隐藏服务器真实IP或网站路径；如防止SYN FLOOD攻击、 HTTP攻击<br>等  </p>
+<p>应用负载-虚拟服务，添加虚拟服务IP地址填公网地址，外部使用https访问，端口填443，节点池选择刚才添加的80端口的节点。</p>
+<p><img src="/./images/20241111/1731309393336.jpg" alt="1731309393336"><br>开启HTTPS自动跳转，访问http域名的时候自动重定向为访问https<br><img src="/./images/20241111/1731309542404.jpg" alt="1731309542404"></p>
+</li>
+<li><p>导入SSL证书，一般为.cer、.crt、.p12、.pfx</p>
+<p><img src="/./images/20241111/image-20241111115723475.png" alt="image-20241111115723475"></p>
+</li>
+<li><p>配置SSL策略</p>
+<p>应用负载-SSL策略-SSL卸载策略，RSA服务器证书选择刚才导入的SSL证书。</p>
+<p><img src="/./images/20241111/image-20241111143742739.png" alt="image-20241111143742739"></p>
+</li>
+</ol>
+]]></content>
+  </entry>
 </search>
