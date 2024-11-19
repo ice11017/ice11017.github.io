@@ -442,4 +442,36 @@
         <tag>encryptAsDiary</tag>
       </tags>
   </entry>
+  <entry>
+    <title>RedHat8服务器开启谷歌二次验证</title>
+    <url>/2024/11/19/20241119-20241119/</url>
+    <content><![CDATA[<p>手机上安装谷歌验证器app</p>
+<p><strong><a href="https://pan.baidu.com/s/1lsG2jRi3RjxE7iaG0q0qtg?pwd=tyqv">https://pan.baidu.com/s/1lsG2jRi3RjxE7iaG0q0qtg?pwd=tyqv</a></strong> </p>
+<p>服务器修改网络源</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">wget http://mirrors.aliyun.com/repo/Centos-8.repo</span><br></pre></td></tr></table></figure>
+
+<p>安装环境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install automake libtool  pam-devel qrencode make git google-authenticator</span><br></pre></td></tr></table></figure>
+
+<p>打开文件 <code>/etc/pam.d/sshd</code> 并在文件头行添加以下行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/pam.d/sshd </span><br><span class="line"># Add to end auth required pam_google_authenticator.so</span><br></pre></td></tr></table></figure>
+
+<p>然后修改<code>/etc/ssh/sshd_config</code></p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line">ChallengeResponseAuthentication yes</span><br></pre></td></tr></table></figure>
+
+<p>运行google-authenticator<br><img src="/./../../images/20241119/image-20241119165124811.png" alt="image-20241119165124811"></p>
+<p>会生成一个二维码并让你输入一串数字，手机打开app扫描二维码</p>
+<p>输入获得的数字（这一步需要联网，之后登录就不需要联网了）</p>
+<p>这会问你一系列的问题，这里是一个推荐的配置：</p>
+<ul>
+<li>使用“基于时间”的基于时间的标记：<strong>是</strong></li>
+<li>更新 <code>.google_authenticator</code> 文件：<strong>是</strong></li>
+<li>禁止多次使用同一身份验证令牌：<strong>是</strong></li>
+<li>增加原始生成时间限制：<strong>否</strong></li>
+<li>启用速率限制：<strong>是</strong></li>
+</ul>
+<p>测试登录<br><img src="/./../../images/20241119/1732006317037.png" alt="1732006317037"></p>
+<p>也可以使用mircrosoft 验证，安卓的应用商场能搜到</p>
+]]></content>
+  </entry>
 </search>
