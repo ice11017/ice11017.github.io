@@ -57,6 +57,75 @@
 ]]></content>
   </entry>
   <entry>
+    <title>终端接入认证</title>
+    <url>/2024/09/18/20240918-20240918/</url>
+    <content><![CDATA[<h1 id="802-1X-AD域用户认证"><a href="#802-1X-AD域用户认证" class="headerlink" title="802.1X+AD域用户认证"></a>802.1X+AD域用户认证</h1><hr>
+<p>设备：深信服全网行为管理AC</p>
+<h2 id="全网AC配置"><a href="#全网AC配置" class="headerlink" title="全网AC配置"></a>全网AC配置</h2><hr>
+<p><strong>配置核心要点</strong>：</p>
+<ol>
+<li>需要使用全网AC，支持802.1x对接</li>
+<li>在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)</li>
+<li>创建本地用户（或者关联LDAP）并添加用户绑定关系</li>
+<li>使用802.1x工具生成交换机配置并刷入交换机</li>
+<li>交换机配置SNMP，AC开启跨三层取MAC进行对接</li>
+<li>绑定用户和MAC实现哑终端mac免认证</li>
+<li>使用测试电脑接入验证</li>
+</ol>
+<p><img src="/./images/20240918/1726708823572.png" alt="1726708823572"></p>
+<p><img src="/./images/20240918/image-20240919093517940.png" alt="image-20240919093517940"><br><img src="/./images/20240918/image-20240919093641873.png" alt="image-20240919093641873"><img src="/./images/20240918/image-20240919094047439.png" alt="image-20240919094047439"></p>
+<p><img src="/./images/20240918/1726709888642.png" alt="1726709888642"></p>
+<p>全网行为管理AC同一个用户最多可以绑定100条用户绑定信息<br><img src="/./images/20240918/1726711666898.jpg" alt="1726711666898"></p>
+<h2 id="交换机配置"><a href="#交换机配置" class="headerlink" title="交换机配置"></a>交换机配置</h2><hr>
+<p>交换机型号华为S5735S</p>
+<p>配置思路：<br>1.创建aaa方案并配置认证方式和计费方式为radius<br>2.创建并配置radius服务器模板的各项参数<br>3.创建认证域并在其上绑定aaa认证方案和计费方案与radius服务器模板<br>4.配置全局默认域<br>5.配置接口开启802.1X认证</p>
+<p>step1：创建并配置RADIUS服务器模板“sangfor_rd”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;HUAWEI&gt;system-view                                //进入系统视图</span><br><span class="line">[HUAWEI] radius-server template sangfor_rd         //创建radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server authentication 192.168.254.100 1812 //设置radius服务器的认证IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server accounting 192.168.254.100 1813     //设置radius服务器的计费IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server shared-key cipher 123456     //设置接入设备与radius认证服务器的共享密钥</span><br><span class="line">[HUAWEI-radius-sangfor_rd] quit</span><br></pre></td></tr></table></figure>
+
+<p>step2：创建AAA认证方案“sangfor_aaa”并配置认证方式为RADIUS。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] aaa</span><br><span class="line">[HUAWEI-aaa] authentication-scheme sangfor_aaa	            //创建aaa认证方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] authentication-mode radius	//配置当前认证方案使用的认证模式</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] quit</span><br><span class="line">[HUAWEI-aaa]accounting-scheme sangfor_aaa		            //创建aaa计费方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]accounting-mode radius	//配置当前使用的计费模式“radius”</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]quit</span><br></pre></td></tr></table></figure>
+
+<p>step3：创建认证域“sangforAD”，并在其上绑定AAA认证方案“sangfor_aaa”与RADIUS服务器模板“sangfor_rd”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI-aaa] domain sangforAD								      //创建认证域“sangforAD”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] authentication-scheme sangfor_aaa	  //在域下绑定aaa认证方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] accounting-scheme sangfor_aaa		  //在域下绑定aaa计费方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] radius-server sangfor_rd			  //在认证域下绑定radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] quit</span><br><span class="line">[HUAWEI-aaa] quit</span><br></pre></td></tr></table></figure>
+
+<p>指定全局默认域, 全局默认域只能配置一个多次配置会被覆盖</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI]domain sangfor_AD                                 //配置全局默认域为“sangfor_AD”</span><br></pre></td></tr></table></figure>
+
+<p>step4：配置802.1X认证（可选）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">配置802.1X接入模板“sangfor_ap”，802.1X接入模板默认采用EAP认证方式。请确保RADIUS服务器支持EAP协议，否则无法处理802.1X认证请求。</span><br><span class="line">[HUAWEI] dot1x-access-profile name sangfor_ap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] dot1x authentication-method eap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] quit</span><br></pre></td></tr></table></figure>
+
+<p>step5：配置认证模板“sangfor_apf”，并在其上绑定802.1X接入模板“sangfor_ap”、指定认证模板下用户的强制认证域为“sangforAD”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] dot1x-access-profile sangfor_ap</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] access-domain sangforAD force       配置端口802.1x强制使用的认证域，如果不配则使用全局默认域</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
+
+<p>step6：配置MAC认证<br>配置MAC接入模板，MAC认证用户的用户名和密码默认均为不带分隔符“-”的MAC地址。需要保证RADIUS服务器上配置的MAC用户名和密码格式与接入设备上的保持一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] mac-access-profile name m1     //创建mac 认证模板</span><br><span class="line">[HUAWEI-mac-access-profile-m1] mac-authen username macaddress format with-hyphen	//设置用户名为xx-xx-xx-xx-xx-xx 的mac地址形式</span><br><span class="line">[HUAWEI-mac-access-profile-m1] quit</span><br><span class="line">[HUAWEI]dot1x timer mac-bypass-delay 30    //配置接入设备802.1x无响应多久后做mab认证</span><br><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] mac-access-profile m1</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] authentication dot1x-mac-bypass   //启用MAC旁路认证</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
+
+<p>step7：在接口GE0&#x2F;0&#x2F;48上绑定认证模板“sangfor_apf”，使能802.1X认证。以接口GE0&#x2F;0&#x2F;48为例，其他接口配置与其类似。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] interface gigabitethernet 0/0/48</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] authentication-profile sangfor_apf</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] quit</span><br></pre></td></tr></table></figure>
+
+<p>step8：配置免认证访问ip<br>NAC认证用户在认证成功之前，无法访问网络。通过配置免认证规则（free-rule）可以使特定的用户无需通过Portal认证即可访问网络中的特定资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] free-rule-template name default_free_rule</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 1 destination ip 10.11.12.13 mask 255.255.255.255 //域控ip，方便域控下发准入插件</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 2 destination ip 11.12.13.14 mask 255.255.255.255</span><br></pre></td></tr></table></figure>
+
+<p>step9：防止AC挂掉，所有终端会断网</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">authentication event authen-server-down action authorize keep no-response  //配置用户在认证服务器Down时保持原有的网络访问权限。</span><br><span class="line">authentication event authen-server-noreply action authorize keep no-response  //配置用户在认证服务器无响应时保持原有的网络访问权限。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="域控配置"><a href="#域控配置" class="headerlink" title="域控配置"></a>域控配置</h2><hr>
+<p>配置思路：</p>
+<ol>
+<li>下载MSI安装包</li>
+<li>域控上面创建组策略</li>
+<li>添加需要下发的安装包并分配权限</li>
+<li>域单点登录用户登录后会自动安装.msi软件</li>
+</ol>
+<p><img src="/./images/20240918/1726710158624.png" alt="1726710158624"><br><img src="/./images/20240918/1726710313482.png" alt="1726710313482"></p>
+<p>右键编辑，选择软件安装，将.msi的安装包添加进去，来源要填ip加路径。<br><img src="/./images/20240918/1726710396805.png" alt="1726710396805"><br><img src="/./images/20240918/image-20240919094844075.png" alt="image-20240919094844075"><br>权限：<br>Domain user (所有域成员)<br>Domain admin (域管理员)<br>Authenticated Users (Windows系统中所有使用用户名、密码登录并通过身份验证的账户，不包括来宾账户Guest)</p>
+<h1 id="检测杀毒软件安装之后才能上网"><a href="#检测杀毒软件安装之后才能上网" class="headerlink" title="检测杀毒软件安装之后才能上网"></a>检测杀毒软件安装之后才能上网</h1><hr>
+<p><img src="/./images/20240918/image-20240919100500107.png" alt="image-20240919100500107"><img src="/./images/20240918/image-20240919100858653.png" alt="image-20240919100858653"><br><img src="/./images/20240918/image-20240919100958984.png" alt="image-20240919100958984"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>虚拟化集群和存储双活</title>
     <url>/2024/09/05/20240905-20240905/</url>
     <content><![CDATA[<h1 id="虚拟化集群和存储双活："><a href="#虚拟化集群和存储双活：" class="headerlink" title="虚拟化集群和存储双活："></a>虚拟化集群和存储双活：</h1><hr>
@@ -159,100 +228,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>burp使用captcha-killer-modified插件</title>
-    <url>/2024/08/22/20240822-20240822/</url>
-    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
-<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
-<hr>
-<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
-<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
-<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
-<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
-<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
-<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
-<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
-<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>终端接入认证</title>
-    <url>/2024/09/18/20240918-20240918/</url>
-    <content><![CDATA[<h1 id="802-1X-AD域用户认证"><a href="#802-1X-AD域用户认证" class="headerlink" title="802.1X+AD域用户认证"></a>802.1X+AD域用户认证</h1><hr>
-<p>设备：深信服全网行为管理AC</p>
-<h2 id="全网AC配置"><a href="#全网AC配置" class="headerlink" title="全网AC配置"></a>全网AC配置</h2><hr>
-<p><strong>配置核心要点</strong>：</p>
-<ol>
-<li>需要使用全网AC，支持802.1x对接</li>
-<li>在AC接入管理-接入认证-802.1x认证里开启802.1x功能并配置radius密钥(界面勾选账号密码认证)</li>
-<li>创建本地用户（或者关联LDAP）并添加用户绑定关系</li>
-<li>使用802.1x工具生成交换机配置并刷入交换机</li>
-<li>交换机配置SNMP，AC开启跨三层取MAC进行对接</li>
-<li>绑定用户和MAC实现哑终端mac免认证</li>
-<li>使用测试电脑接入验证</li>
-</ol>
-<p><img src="/./images/20240918/1726708823572.png" alt="1726708823572"></p>
-<p><img src="/./images/20240918/image-20240919093517940.png" alt="image-20240919093517940"><br><img src="/./images/20240918/image-20240919093641873.png" alt="image-20240919093641873"><img src="/./images/20240918/image-20240919094047439.png" alt="image-20240919094047439"></p>
-<p><img src="/./images/20240918/1726709888642.png" alt="1726709888642"></p>
-<p>全网行为管理AC同一个用户最多可以绑定100条用户绑定信息<br><img src="/./images/20240918/1726711666898.jpg" alt="1726711666898"></p>
-<h2 id="交换机配置"><a href="#交换机配置" class="headerlink" title="交换机配置"></a>交换机配置</h2><hr>
-<p>交换机型号华为S5735S</p>
-<p>配置思路：<br>1.创建aaa方案并配置认证方式和计费方式为radius<br>2.创建并配置radius服务器模板的各项参数<br>3.创建认证域并在其上绑定aaa认证方案和计费方案与radius服务器模板<br>4.配置全局默认域<br>5.配置接口开启802.1X认证</p>
-<p>step1：创建并配置RADIUS服务器模板“sangfor_rd”。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;HUAWEI&gt;system-view                                //进入系统视图</span><br><span class="line">[HUAWEI] radius-server template sangfor_rd         //创建radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server authentication 192.168.254.100 1812 //设置radius服务器的认证IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server accounting 192.168.254.100 1813     //设置radius服务器的计费IP地址和端口号</span><br><span class="line">[HUAWEI-radius-sangfor_rd] radius-server shared-key cipher 123456     //设置接入设备与radius认证服务器的共享密钥</span><br><span class="line">[HUAWEI-radius-sangfor_rd] quit</span><br></pre></td></tr></table></figure>
-
-<p>step2：创建AAA认证方案“sangfor_aaa”并配置认证方式为RADIUS。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] aaa</span><br><span class="line">[HUAWEI-aaa] authentication-scheme sangfor_aaa	            //创建aaa认证方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] authentication-mode radius	//配置当前认证方案使用的认证模式</span><br><span class="line">[HUAWEI-aaa-authen-sangfor_aaa] quit</span><br><span class="line">[HUAWEI-aaa]accounting-scheme sangfor_aaa		            //创建aaa计费方案&quot;sangfor_aaa&quot;</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]accounting-mode radius	//配置当前使用的计费模式“radius”</span><br><span class="line">[HUAWEI-aaa-accounting-sangfor_aaa]quit</span><br></pre></td></tr></table></figure>
-
-<p>step3：创建认证域“sangforAD”，并在其上绑定AAA认证方案“sangfor_aaa”与RADIUS服务器模板“sangfor_rd”。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI-aaa] domain sangforAD								      //创建认证域“sangforAD”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] authentication-scheme sangfor_aaa	  //在域下绑定aaa认证方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] accounting-scheme sangfor_aaa		  //在域下绑定aaa计费方案“sangfor_aaa”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] radius-server sangfor_rd			  //在认证域下绑定radius服务器模板“sangfor_rd”</span><br><span class="line">[HUAWEI-aaa-domain-sangforAD] quit</span><br><span class="line">[HUAWEI-aaa] quit</span><br></pre></td></tr></table></figure>
-
-<p>指定全局默认域, 全局默认域只能配置一个多次配置会被覆盖</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI]domain sangfor_AD                                 //配置全局默认域为“sangfor_AD”</span><br></pre></td></tr></table></figure>
-
-<p>step4：配置802.1X认证（可选）。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">配置802.1X接入模板“sangfor_ap”，802.1X接入模板默认采用EAP认证方式。请确保RADIUS服务器支持EAP协议，否则无法处理802.1X认证请求。</span><br><span class="line">[HUAWEI] dot1x-access-profile name sangfor_ap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] dot1x authentication-method eap</span><br><span class="line">[HUAWEI-dot1x-access-profile-sangfor_ap] quit</span><br></pre></td></tr></table></figure>
-
-<p>step5：配置认证模板“sangfor_apf”，并在其上绑定802.1X接入模板“sangfor_ap”、指定认证模板下用户的强制认证域为“sangforAD”。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] dot1x-access-profile sangfor_ap</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] access-domain sangforAD force       配置端口802.1x强制使用的认证域，如果不配则使用全局默认域</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
-
-<p>step6：配置MAC认证<br>配置MAC接入模板，MAC认证用户的用户名和密码默认均为不带分隔符“-”的MAC地址。需要保证RADIUS服务器上配置的MAC用户名和密码格式与接入设备上的保持一致。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] mac-access-profile name m1     //创建mac 认证模板</span><br><span class="line">[HUAWEI-mac-access-profile-m1] mac-authen username macaddress format with-hyphen	//设置用户名为xx-xx-xx-xx-xx-xx 的mac地址形式</span><br><span class="line">[HUAWEI-mac-access-profile-m1] quit</span><br><span class="line">[HUAWEI]dot1x timer mac-bypass-delay 30    //配置接入设备802.1x无响应多久后做mab认证</span><br><span class="line">[HUAWEI] authentication-profile name sangfor_apf</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] mac-access-profile m1</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] authentication dot1x-mac-bypass   //启用MAC旁路认证</span><br><span class="line">[HUAWEI-authen-profile-sangfor_apf] quit</span><br></pre></td></tr></table></figure>
-
-<p>step7：在接口GE0&#x2F;0&#x2F;48上绑定认证模板“sangfor_apf”，使能802.1X认证。以接口GE0&#x2F;0&#x2F;48为例，其他接口配置与其类似。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] interface gigabitethernet 0/0/48</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] authentication-profile sangfor_apf</span><br><span class="line">[HUAWEI-GigabitEthernet0/0/48] quit</span><br></pre></td></tr></table></figure>
-
-<p>step8：配置免认证访问ip<br>NAC认证用户在认证成功之前，无法访问网络。通过配置免认证规则（free-rule）可以使特定的用户无需通过Portal认证即可访问网络中的特定资源。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[HUAWEI] free-rule-template name default_free_rule</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 1 destination ip 10.11.12.13 mask 255.255.255.255 //域控ip，方便域控下发准入插件</span><br><span class="line">[HUAWEI-free-rule-default_free_rule] free-rule 2 destination ip 11.12.13.14 mask 255.255.255.255</span><br></pre></td></tr></table></figure>
-
-<p>step9：防止AC挂掉，所有终端会断网</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">authentication event authen-server-down action authorize keep no-response  //配置用户在认证服务器Down时保持原有的网络访问权限。</span><br><span class="line">authentication event authen-server-noreply action authorize keep no-response  //配置用户在认证服务器无响应时保持原有的网络访问权限。</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="域控配置"><a href="#域控配置" class="headerlink" title="域控配置"></a>域控配置</h2><hr>
-<p>配置思路：</p>
-<ol>
-<li>下载MSI安装包</li>
-<li>域控上面创建组策略</li>
-<li>添加需要下发的安装包并分配权限</li>
-<li>域单点登录用户登录后会自动安装.msi软件</li>
-</ol>
-<p><img src="/./images/20240918/1726710158624.png" alt="1726710158624"><br><img src="/./images/20240918/1726710313482.png" alt="1726710313482"></p>
-<p>右键编辑，选择软件安装，将.msi的安装包添加进去，来源要填ip加路径。<br><img src="/./images/20240918/1726710396805.png" alt="1726710396805"><br><img src="/./images/20240918/image-20240919094844075.png" alt="image-20240919094844075"><br>权限：<br>Domain user (所有域成员)<br>Domain admin (域管理员)<br>Authenticated Users (Windows系统中所有使用用户名、密码登录并通过身份验证的账户，不包括来宾账户Guest)</p>
-<h1 id="检测杀毒软件安装之后才能上网"><a href="#检测杀毒软件安装之后才能上网" class="headerlink" title="检测杀毒软件安装之后才能上网"></a>检测杀毒软件安装之后才能上网</h1><hr>
-<p><img src="/./images/20240918/image-20240919100500107.png" alt="image-20240919100500107"><img src="/./images/20240918/image-20240919100858653.png" alt="image-20240919100858653"><br><img src="/./images/20240918/image-20240919100958984.png" alt="image-20240919100958984"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>交换机ssh配置和密码策略</title>
-    <url>/2024/10/30/20241030-20241030/</url>
-    <content><![CDATA[<h1 id="华为交换机配置"><a href="#华为交换机配置" class="headerlink" title="华为交换机配置"></a>华为交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Huawei]set password min-length 8  //设置密码最小长度为8</span><br><span class="line">[Huawei]stelnet server enable      //开启ssh服务</span><br><span class="line">[Huawei]ssh client first-time enable  </span><br><span class="line">[Huawei]ssh server-source all-interface</span><br><span class="line">[Huawei]acl 2001</span><br><span class="line">[Huawei-acl-basic-2001]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[Huawei]aaa</span><br><span class="line">[Huawei-aaa]local-aaa-user password policy administrator</span><br><span class="line">[Huawei-aaa]undo password alert original  //取消第一次登录修改密码</span><br><span class="line">[Huawei-aaa]password expire 90            //密码过期90天</span><br><span class="line">[Huawei-aaa]local-aaa-user wrong-password retry-interval 5 retry-time 5 block-time 10   //密码尝试登录失败5次，锁用户10分钟</span><br><span class="line">[Huawei-aaa]user-password complexity-check three-of-kinds    //设置密码为四选三复杂度检查功能</span><br><span class="line">[Huawei-aaa]local-user glxyxxk  password irreversible-cipher Glxy@2024 privilege level 15</span><br><span class="line">[Huawei-aaa]ocal-user user  password irreversible-cipher Glxy@2024 privilege level 1</span><br><span class="line">[Huawei-aaa]local-user user service-type ssh</span><br><span class="line">[Huawei]user-interface vty 0 4</span><br><span class="line">[Huawei-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[[Huawei-ui-vty0-4]acl 2001 inbound</span><br><span class="line">[Huawei-ui-vty0-4]protocol inbound ssh</span><br><span class="line">[Huawei-ui-vty0-4]idle-time 10 //10分钟不操作自动退出</span><br><span class="line">[Huawei]display local-aaa-user password policy administrator //检查配置</span><br><span class="line">[Huawei-aaa]display this     //检查配置</span><br></pre></td></tr></table></figure>
-
-<h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">针对设备的用户做密码策略，也可以对某一个用户做策略</span><br><span class="line">[H3c]password-control enable</span><br><span class="line">[H3c]password-control aging 90</span><br><span class="line">[H3c]password-control change-password first-login enabless</span><br><span class="line">[H3c]password-control length 8</span><br><span class="line">[H3c]password-control login idle-time 30  //30天未登录设备，锁定账号</span><br><span class="line">[H3c]password-control complexity same-character check  //开启在配置的密码中检查包含连续三个或以上相同字符的功能</span><br><span class="line">[H3c]ssh server enable</span><br><span class="line">[H3c]local-user admin</span><br><span class="line">[H3c-luser-admin]password simple admin12345</span><br><span class="line">[H3c-luser-admin]server type ssh</span><br><span class="line">[H3c]line vty 0 4</span><br><span class="line">[H3c]authentication-mode scheme</span><br><span class="line">[H3c]protocol inbound ssh</span><br><span class="line">[H3c-line-vty0-4]user-role network-admin</span><br><span class="line">[H3c-line-vty0-4]user-role network-operator</span><br><span class="line">[H3c-line-vty0-4]idle-timeout 10 0     //10分钟不操作自动退出</span><br><span class="line">[H3c]display password-control  //检查配置</span><br><span class="line">[H3c]acl 2001</span><br><span class="line">[H3c]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[H3c]ssh server acl 2001</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
     <title>RedHat8等保密码策略配置</title>
     <url>/2024/10/28/20241028-20241028/</url>
     <content><![CDATA[<h1 id="更改密码复杂度和有效期"><a href="#更改密码复杂度和有效期" class="headerlink" title="更改密码复杂度和有效期"></a>更改密码复杂度和有效期</h1><p><img src="/./images/20241028/1730101588028.png" alt="1730101588028"></p>
@@ -320,6 +295,26 @@
 
 <p>2.登录失败后执行命令生成相关selinux策略</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用 audit2allow 生成策略：根据找到的拒绝信息，使用 audit2allow 工具生成 SELinux 策略</span><br><span class="line">sudo cat /var/log/audit/audit.log | audit2allow -M mysshd</span><br><span class="line">加载模块</span><br><span class="line">sudo semodule -i mysshd.pp</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>交换机ssh配置和密码策略</title>
+    <url>/2024/10/30/20241030-20241030/</url>
+    <content><![CDATA[<h1 id="华为交换机配置"><a href="#华为交换机配置" class="headerlink" title="华为交换机配置"></a>华为交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Huawei]set password min-length 8  //设置密码最小长度为8</span><br><span class="line">[Huawei]stelnet server enable      //开启ssh服务</span><br><span class="line">[Huawei]ssh client first-time enable  </span><br><span class="line">[Huawei]ssh server-source all-interface</span><br><span class="line">[Huawei]acl 2001</span><br><span class="line">[Huawei-acl-basic-2001]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[Huawei]aaa</span><br><span class="line">[Huawei-aaa]local-aaa-user password policy administrator</span><br><span class="line">[Huawei-aaa]undo password alert original  //取消第一次登录修改密码</span><br><span class="line">[Huawei-aaa]password expire 90            //密码过期90天</span><br><span class="line">[Huawei-aaa]local-aaa-user wrong-password retry-interval 5 retry-time 5 block-time 10   //密码尝试登录失败5次，锁用户10分钟</span><br><span class="line">[Huawei-aaa]user-password complexity-check three-of-kinds    //设置密码为四选三复杂度检查功能</span><br><span class="line">[Huawei-aaa]local-user glxyxxk  password irreversible-cipher Glxy@2024 privilege level 15</span><br><span class="line">[Huawei-aaa]ocal-user user  password irreversible-cipher Glxy@2024 privilege level 1</span><br><span class="line">[Huawei-aaa]local-user user service-type ssh</span><br><span class="line">[Huawei]user-interface vty 0 4</span><br><span class="line">[Huawei-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[[Huawei-ui-vty0-4]acl 2001 inbound</span><br><span class="line">[Huawei-ui-vty0-4]protocol inbound ssh</span><br><span class="line">[Huawei-ui-vty0-4]idle-time 10 //10分钟不操作自动退出</span><br><span class="line">[Huawei]display local-aaa-user password policy administrator //检查配置</span><br><span class="line">[Huawei-aaa]display this     //检查配置</span><br></pre></td></tr></table></figure>
+
+<h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">针对设备的用户做密码策略，也可以对某一个用户做策略</span><br><span class="line">[H3c]password-control enable</span><br><span class="line">[H3c]password-control aging 90</span><br><span class="line">[H3c]password-control change-password first-login enabless</span><br><span class="line">[H3c]password-control length 8</span><br><span class="line">[H3c]password-control login idle-time 30  //30天未登录设备，锁定账号</span><br><span class="line">[H3c]password-control complexity same-character check  //开启在配置的密码中检查包含连续三个或以上相同字符的功能</span><br><span class="line">[H3c]ssh server enable</span><br><span class="line">[H3c]local-user admin</span><br><span class="line">[H3c-luser-admin]password simple admin12345</span><br><span class="line">[H3c-luser-admin]server type ssh</span><br><span class="line">[H3c]line vty 0 4</span><br><span class="line">[H3c]authentication-mode scheme</span><br><span class="line">[H3c]protocol inbound ssh</span><br><span class="line">[H3c-line-vty0-4]user-role network-admin</span><br><span class="line">[H3c-line-vty0-4]user-role network-operator</span><br><span class="line">[H3c-line-vty0-4]idle-timeout 10 0     //10分钟不操作自动退出</span><br><span class="line">[H3c]display password-control  //检查配置</span><br><span class="line">[H3c]acl 2001</span><br><span class="line">[H3c]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[H3c]ssh server acl 2001</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>Python脚本批量配置交换机</title>
+    <url>/2025/01/24/20250124-20250124/</url>
+    <content><![CDATA[<h1 id="Python脚本批量配置交换机"><a href="#Python脚本批量配置交换机" class="headerlink" title="Python脚本批量配置交换机"></a>Python脚本批量配置交换机</h1><p>使用paramiko库编写脚本进行简单巡检<br>登录账号和密码相同：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import paramiko</span><br><span class="line">import time</span><br><span class="line">import os</span><br><span class="line">from getpass import getpass</span><br><span class="line">user = input(&#x27;Username:&#x27;)</span><br><span class="line">pw = getpass(&#x27;password:&#x27;)</span><br><span class="line">f = open(&quot;xunjian.txt&quot;,&quot;r&quot;)        //需在脚本同路径下创建xunjian.txt，txt里按行填ip</span><br><span class="line">for line in f.readlines():</span><br><span class="line">  local = time.strftime(&#x27;(%Y%m%d)&#x27;)  //生成的文件和文件夹显示年月日</span><br><span class="line">  ip = line.strip()</span><br><span class="line">  ssh = paramiko.SSHClient()</span><br><span class="line">  ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">  ssh.connect(hostname=ip,username=user,password=pw)</span><br><span class="line">  print(&quot;成功登录&quot;,ip)</span><br><span class="line">  command =  ssh.invoke_shell()</span><br><span class="line">  command.send(&quot;screen-length disable\n&quot;)</span><br><span class="line">  command.send(&quot;screen-length 0 tem\n&quot;)</span><br><span class="line">  command.send(&quot;dis device\n&quot;)</span><br><span class="line">  command.send(&quot;dis version\n&quot;)</span><br><span class="line">  command.send(&quot;dis logbuffer size 20\n&quot;)</span><br><span class="line">  command.send(&quot;dis cu\n&quot;)</span><br><span class="line">  time.sleep(70)                   //控制每次循环时间为70s，有些交换机反应慢的，时间需要往上加</span><br><span class="line">  output = command.recv(65535).decode(&#x27;utf-8&#x27;,&#x27;ignore&#x27;)</span><br><span class="line">  print(output)</span><br><span class="line">  folder_path = f&#x27;xjconfig/&#123;local&#125;&#x27;   //需在脚本同路径下创建xjconfig文件夹</span><br><span class="line">  if not os.path.exists(folder_path):</span><br><span class="line">    os.makedirs(folder_path)        //在xjconfig里生成当天的文件夹</span><br><span class="line">  file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;.txt&#x27;</span><br><span class="line">  temp_file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;_temp.txt&#x27; //输出里有gbk编码的话，可能会报错</span><br><span class="line">  with open(temp_file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    temp_file.write(output)</span><br><span class="line"># 读取临时文件并重新以 utf-8 编码写入最终文件</span><br><span class="line">  with open(temp_file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    content = temp_file.read()</span><br><span class="line">  with open(file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as final_file:</span><br><span class="line">    final_file.write(content)</span><br><span class="line">  # 删除临时文件</span><br><span class="line">  os.remove(temp_file_path)</span><br><span class="line">ssh.close()</span><br></pre></td></tr></table></figure>
+
+<p>登录账号和密码不同：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import paramiko</span><br><span class="line">import time</span><br><span class="line">import os</span><br><span class="line">from getpass import getpass</span><br><span class="line">#user = input(&#x27;Username:&#x27;)</span><br><span class="line">#pw = getpass(&#x27;password:&#x27;)</span><br><span class="line">f = open(&quot;ip-list.txt&quot;,&quot;r&quot;)                   //需在脚本同路径下创建ip-list.txt</span><br><span class="line">for line in f.readlines():</span><br><span class="line">  local = time.strftime(&#x27;(%Y%m%d)&#x27;)</span><br><span class="line">  ip,user,pw = line.strip().split(&#x27;,&#x27;)        //格式按照ip,用户名，密码填</span><br><span class="line">  ssh = paramiko.SSHClient()</span><br><span class="line">  ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">  ssh.connect(hostname=ip,username=user,password=pw)</span><br><span class="line">  print(&quot;成功登录&quot;,ip)</span><br><span class="line">  command =  ssh.invoke_shell()</span><br><span class="line">  command.send(&quot;screen-length disable\n&quot;)</span><br><span class="line">  command.send(&quot;screen-length 0 tem\n&quot;)</span><br><span class="line">  command.send(&quot;dis device\n&quot;)</span><br><span class="line">  command.send(&quot;dis version\n&quot;)</span><br><span class="line">  command.send(&quot;dis logbuffer size 20\n&quot;)</span><br><span class="line">  command.send(&quot;dis cu\n&quot;)</span><br><span class="line">  time.sleep(70)                   //控制每次循环时间为70s，有些交换机反应慢的，时间需要往上加</span><br><span class="line">  output = command.recv(65535).decode(&#x27;utf-8&#x27;,&#x27;ignore&#x27;)</span><br><span class="line">  print(output)</span><br><span class="line">  folder_path = f&#x27;xjconfig/&#123;local&#125;&#x27;   //需在脚本同路径下创建xjconfig文件夹</span><br><span class="line">  if not os.path.exists(folder_path):</span><br><span class="line">    os.makedirs(folder_path)        //在xjconfig里生成当天的文件夹</span><br><span class="line">  file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;.txt&#x27;</span><br><span class="line">  temp_file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;_temp.txt&#x27; //输出里有gbk编码的话，可能会报错</span><br><span class="line">  with open(temp_file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    temp_file.write(output)</span><br><span class="line"># 读取临时文件并重新以 utf-8 编码写入最终文件</span><br><span class="line">  with open(temp_file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    content = temp_file.read()</span><br><span class="line">  with open(file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as final_file:</span><br><span class="line">    final_file.write(content)</span><br><span class="line">  # 删除临时文件</span><br><span class="line">  os.remove(temp_file_path)</span><br><span class="line">ssh.close()</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
@@ -398,6 +393,22 @@
 ]]></content>
   </entry>
   <entry>
+    <title>burp使用captcha-killer-modified插件</title>
+    <url>/2024/08/22/20240822-20240822/</url>
+    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
+<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
+<hr>
+<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
+<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
+<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
+<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
+<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
+<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
+<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
+<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>不常见问题</title>
     <url>/2024/09/02/20240902-1-20240902/</url>
     <content><![CDATA[<h1 id="CentOS-7-telnet目标服务器秒断开"><a href="#CentOS-7-telnet目标服务器秒断开" class="headerlink" title="CentOS 7 telnet目标服务器秒断开"></a>CentOS 7 telnet目标服务器秒断开</h1><hr>
@@ -422,6 +433,21 @@
 
 <p>华三设备不需要配置arp broadcast enable</p>
 <h1 id="安全设备的业务网段需要和其他管理网段通信"><a href="#安全设备的业务网段需要和其他管理网段通信" class="headerlink" title="安全设备的业务网段需要和其他管理网段通信"></a>安全设备的业务网段需要和其他管理网段通信</h1><p>安全设备1 业务口(ETH1)IP：192.168.254.1 管理口(ETH0)IP：192.168.253.1<br>配置了默认路由0.0.0.0&#x2F;0 192.168.254.254<br>安全设备2 管理口和业务口同一IP：192.168.253.2<br>192.168.254.0&#x2F;24和192.168.253.0&#x2F;24的网关在同一台交换机上<br>现象：发现安全设备1的192.168.254.1不通192.168.253.2<br>原因：安全设备存在直连路由，192.168.253.0&#x2F;24的路由走管理口eth0到网关192.168.253.254，会导致来回路径不一致的问题。需要安全设备1上配置明细路由，ip route-static 192.168.253.2&#x2F;32 192.168.254.254。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>RedHat 8.7设置本地yum源</title>
+    <url>/2024/09/02/20240902-2-20240902/</url>
+    <content><![CDATA[<h1 id="RedHat-8-7最小功能安装，很多命令无法使用"><a href="#RedHat-8-7最小功能安装，很多命令无法使用" class="headerlink" title="RedHat 8.7最小功能安装，很多命令无法使用"></a>RedHat 8.7最小功能安装，很多命令无法使用</h1><hr>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">mkdir cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom --挂载镜像文件到cdrom</span><br><span class="line">echo &quot;/dev/cdrom /mnt/cdrom iso9660 defaults,nofail 0 0&quot; --可以设置开机自动挂载</span><br><span class="line">rm -rf /etc/yum.repos.d/* --删除原来的源地址文件也可以备份一份出来放到其他文件夹</span><br><span class="line">touch /etc/yum.repos.d/local.repo --新建repo文件</span><br><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum list</span><br></pre></td></tr></table></figure>
+
+<p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
+<h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
+<p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
 ]]></content>
   </entry>
   <entry>
@@ -470,20 +496,5 @@
       <tags>
         <tag>encryptAsDiary</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>RedHat 8.7设置本地yum源</title>
-    <url>/2024/09/02/20240902-2-20240902/</url>
-    <content><![CDATA[<h1 id="RedHat-8-7最小功能安装，很多命令无法使用"><a href="#RedHat-8-7最小功能安装，很多命令无法使用" class="headerlink" title="RedHat 8.7最小功能安装，很多命令无法使用"></a>RedHat 8.7最小功能安装，很多命令无法使用</h1><hr>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">mkdir cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom --挂载镜像文件到cdrom</span><br><span class="line">echo &quot;/dev/cdrom /mnt/cdrom iso9660 defaults,nofail 0 0&quot; --可以设置开机自动挂载</span><br><span class="line">rm -rf /etc/yum.repos.d/* --删除原来的源地址文件也可以备份一份出来放到其他文件夹</span><br><span class="line">touch /etc/yum.repos.d/local.repo --新建repo文件</span><br><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum list</span><br></pre></td></tr></table></figure>
-
-<p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
-<h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
-<p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
-]]></content>
   </entry>
 </search>
