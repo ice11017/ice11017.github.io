@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
+
+<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>123</title>
     <url>/2024/08/21/123/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
@@ -18,20 +32,6 @@
       <tags>
         <tag>encryptAsDiary</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
-
-<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
-
-<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
-
-]]></content>
   </entry>
   <entry>
     <title>burp使用captcha-killer-modified插件</title>
@@ -175,6 +175,34 @@
 ]]></content>
   </entry>
   <entry>
+    <title>RedHat8等保密码策略配置</title>
+    <url>/2024/10/28/20241028-20241028/</url>
+    <content><![CDATA[<h1 id="更改密码复杂度和有效期"><a href="#更改密码复杂度和有效期" class="headerlink" title="更改密码复杂度和有效期"></a>更改密码复杂度和有效期</h1><p><img src="/./images/20241028/1730101588028.png" alt="1730101588028"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/pam.d/system-auth</span><br><span class="line">将文件中的下面两行：</span><br><span class="line">password    requisite     pam_cracklib.so try_first_pass retry=3 type=</span><br><span class="line">password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok</span><br><span class="line">改为：</span><br><span class="line">password    requisite     pam_cracklib.so try_first_pass retry=3 type= minlen=6 ucredit=-1 lcredit=-1 dcredit=-1</span><br><span class="line">password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok remember=5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">查看密码有效期</span><br><span class="line">chage -l root</span><br><span class="line">强制用户下次登陆修改密码，并且设置密码最高有效期90，提前30天发警报提示</span><br><span class="line">chage -d 0 -M 90 -W 30 root</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置登录失败策略和登录超时时间"><a href="#配置登录失败策略和登录超时时间" class="headerlink" title="配置登录失败策略和登录超时时间"></a>配置登录失败策略和登录超时时间</h1><p><img src="/./images/20241028/image-20241028174636484.png" alt="image-20241028174636484"></p>
+<h2 id="配置登录30分钟不操作自动退出"><a href="#配置登录30分钟不操作自动退出" class="headerlink" title="配置登录30分钟不操作自动退出"></a>配置登录30分钟不操作自动退出</h2><p>修改&#x2F;etc的profile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line">在最后面添加一行export TMOUT=1800</span><br><span class="line">保存后执行source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置登录失败10次，锁3分钟"><a href="#配置登录失败10次，锁3分钟" class="headerlink" title="配置登录失败10次，锁3分钟"></a>配置登录失败10次，锁3分钟</h2><p>修改&#x2F;etc&#x2F;ssh里的sshd.conf文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd.conf</span><br><span class="line">userpam yes</span><br></pre></td></tr></table></figure>
+
+<p>修改&#x2F;etc&#x2F;pam.d里的system-auth和password-auth文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/system-auth /etc/pam.d/password-auth</span><br><span class="line">在auth        sufficient    pam_unix.so try_first_pass nullok上下添加两行</span><br><span class="line"></span><br><span class="line">  auth        required      pam_faillock.so preauth silent audit even_deny_root deny=10 unlock_time=180</span><br><span class="line">  auth        sufficient    pam_unix.so try_first_pass nullok</span><br><span class="line">  auth        required      pam_deny.so</span><br><span class="line">  auth        [default=die] pam_faillock.so authfail audit even_deny_root deny=10 unlock_time=180</span><br><span class="line"></span><br><span class="line">在account required pam_unix.so下添加</span><br><span class="line"></span><br><span class="line">  account required pam_faillock.so</span><br></pre></td></tr></table></figure>
+
+<p>在&#x2F;etc&#x2F;pam.d添加sshd文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/sshd</span><br><span class="line">#文件内容如下</span><br><span class="line">#%PAM-1.0</span><br><span class="line">auth	   required	pam_sepermit.so</span><br><span class="line">auth       substack     password-auth</span><br><span class="line">auth       include      postlogin</span><br><span class="line">#Used with polkit to reauthorize users in remote sessions</span><br><span class="line">-auth      optional     pam_reauthorize.so prepare</span><br><span class="line">account    required     pam_nologin.so</span><br><span class="line">account    include      password-auth</span><br><span class="line">password   include      password-auth</span><br><span class="line">#pam_selinux.so close should be the first session rule</span><br><span class="line">session    required     pam_selinux.so close</span><br><span class="line">session    required     pam_loginuid.so</span><br><span class="line">#pam_selinux.so open should only be followed by sessions to be executed in the user context</span><br><span class="line">session    required     pam_selinux.so open env_params</span><br><span class="line">session    required     pam_namespace.so</span><br><span class="line">session    optional     pam_keyinit.so force revoke</span><br><span class="line">session    include      password-auth</span><br><span class="line">session    include      postlogin</span><br><span class="line">#Used with polkit to reauthorize users in remote sessions</span><br><span class="line">-session   optional     pam_reauthorize.so prepare</span><br></pre></td></tr></table></figure>
+
+<p>修改&#x2F;etc&#x2F;pam.d&#x2F;login文件，添加四行配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/pam.d/login</span><br><span class="line">auth       substack     password-auth</span><br><span class="line">account    include      password-auth</span><br><span class="line">password   include      password-auth</span><br><span class="line">session    include      password-auth</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建三权分立账号"><a href="#创建三权分立账号" class="headerlink" title="创建三权分立账号"></a>创建三权分立账号</h1><h1 id><a href="#" class="headerlink" title></a><img src="/./images/20241028/image-20241028175718601.png" alt="image-20241028175718601"></h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.新建系统管理员</span><br><span class="line">useradd sysadmin</span><br><span class="line">passwd sysadmin</span><br><span class="line">新建安全管理员</span><br><span class="line">useradd secadmin</span><br><span class="line">passwd secadmin</span><br><span class="line">新建审计管理员</span><br><span class="line">useradd auditadmin</span><br><span class="line">passwd auditadmin</span><br><span class="line">2.修改visudo配置</span><br><span class="line">visudo </span><br><span class="line">#系统管理员</span><br><span class="line">Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum</span><br><span class="line">Cmnd_Alias SERVICES = /sbin/service, /sbin/chkconfig, /usr/bin/systemctl start, /usr/bin/systemctl stop, /usr/bin/systemctl reload, /usr/bin/systemctl restart, /usr/bin/systemctl status, /usr/bin/systemctl enable, /usr/bin/systemctl disable</span><br><span class="line">Cmnd_Alias STORAGE = /sbin/fdisk, /sbin/sfdisk, /sbin/parted, /sbin/partprobe, /bin/mount, /bin/umount</span><br><span class="line">sysadmin ALL=(root) SOFTWARE,SERVICES,STORAGE</span><br><span class="line"></span><br><span class="line">#安全管理员</span><br><span class="line">Cmnd_Alias DELEGATING = /usr/sbin/visudo, /bin/chown, /bin/chmod, /bin/chgrp</span><br><span class="line">Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall</span><br><span class="line">Cmnd_Alias NETWORKING = /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool</span><br><span class="line">secadmin ALL=(root) DELEGATING,PROCESSES,NETWORKING</span><br><span class="line"> </span><br><span class="line">#审计管理员的权限</span><br><span class="line">auditadmin ALL=(root) NOPASSWD:/usr/sbin/aureport,NOPASSWD:/usr/sbin/autrace,NOPASSWD:/usr/sbin/ausearch,NOPASSWD:/usr/sbin/audispd,NOPASSWD:/usr/sbin/auditctl</span><br><span class="line"> </span><br><span class="line">3.测试配置是否正确</span><br><span class="line">visudo -c</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>终端接入认证</title>
     <url>/2024/09/18/20240918-20240918/</url>
     <content><![CDATA[<h1 id="802-1X-AD域用户认证"><a href="#802-1X-AD域用户认证" class="headerlink" title="802.1X+AD域用户认证"></a>802.1X+AD域用户认证</h1><hr>
@@ -244,34 +272,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>RedHat8等保密码策略配置</title>
-    <url>/2024/10/28/20241028-20241028/</url>
-    <content><![CDATA[<h1 id="更改密码复杂度和有效期"><a href="#更改密码复杂度和有效期" class="headerlink" title="更改密码复杂度和有效期"></a>更改密码复杂度和有效期</h1><p><img src="/./images/20241028/1730101588028.png" alt="1730101588028"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/pam.d/system-auth</span><br><span class="line">将文件中的下面两行：</span><br><span class="line">password    requisite     pam_cracklib.so try_first_pass retry=3 type=</span><br><span class="line">password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok</span><br><span class="line">改为：</span><br><span class="line">password    requisite     pam_cracklib.so try_first_pass retry=3 type= minlen=6 ucredit=-1 lcredit=-1 dcredit=-1</span><br><span class="line">password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok remember=5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">查看密码有效期</span><br><span class="line">chage -l root</span><br><span class="line">强制用户下次登陆修改密码，并且设置密码最高有效期90，提前30天发警报提示</span><br><span class="line">chage -d 0 -M 90 -W 30 root</span><br></pre></td></tr></table></figure>
-
-<h1 id="配置登录失败策略和登录超时时间"><a href="#配置登录失败策略和登录超时时间" class="headerlink" title="配置登录失败策略和登录超时时间"></a>配置登录失败策略和登录超时时间</h1><p><img src="/./images/20241028/image-20241028174636484.png" alt="image-20241028174636484"></p>
-<h2 id="配置登录30分钟不操作自动退出"><a href="#配置登录30分钟不操作自动退出" class="headerlink" title="配置登录30分钟不操作自动退出"></a>配置登录30分钟不操作自动退出</h2><p>修改&#x2F;etc的profile文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line">在最后面添加一行export TMOUT=1800</span><br><span class="line">保存后执行source /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置登录失败10次，锁3分钟"><a href="#配置登录失败10次，锁3分钟" class="headerlink" title="配置登录失败10次，锁3分钟"></a>配置登录失败10次，锁3分钟</h2><p>修改&#x2F;etc&#x2F;ssh里的sshd.conf文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd.conf</span><br><span class="line">userpam yes</span><br></pre></td></tr></table></figure>
-
-<p>修改&#x2F;etc&#x2F;pam.d里的system-auth和password-auth文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/system-auth /etc/pam.d/password-auth</span><br><span class="line">在auth        sufficient    pam_unix.so try_first_pass nullok上下添加两行</span><br><span class="line"></span><br><span class="line">  auth        required      pam_faillock.so preauth silent audit even_deny_root deny=10 unlock_time=180</span><br><span class="line">  auth        sufficient    pam_unix.so try_first_pass nullok</span><br><span class="line">  auth        required      pam_deny.so</span><br><span class="line">  auth        [default=die] pam_faillock.so authfail audit even_deny_root deny=10 unlock_time=180</span><br><span class="line"></span><br><span class="line">在account required pam_unix.so下添加</span><br><span class="line"></span><br><span class="line">  account required pam_faillock.so</span><br></pre></td></tr></table></figure>
-
-<p>在&#x2F;etc&#x2F;pam.d添加sshd文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/sshd</span><br><span class="line">#文件内容如下</span><br><span class="line">#%PAM-1.0</span><br><span class="line">auth	   required	pam_sepermit.so</span><br><span class="line">auth       substack     password-auth</span><br><span class="line">auth       include      postlogin</span><br><span class="line">#Used with polkit to reauthorize users in remote sessions</span><br><span class="line">-auth      optional     pam_reauthorize.so prepare</span><br><span class="line">account    required     pam_nologin.so</span><br><span class="line">account    include      password-auth</span><br><span class="line">password   include      password-auth</span><br><span class="line">#pam_selinux.so close should be the first session rule</span><br><span class="line">session    required     pam_selinux.so close</span><br><span class="line">session    required     pam_loginuid.so</span><br><span class="line">#pam_selinux.so open should only be followed by sessions to be executed in the user context</span><br><span class="line">session    required     pam_selinux.so open env_params</span><br><span class="line">session    required     pam_namespace.so</span><br><span class="line">session    optional     pam_keyinit.so force revoke</span><br><span class="line">session    include      password-auth</span><br><span class="line">session    include      postlogin</span><br><span class="line">#Used with polkit to reauthorize users in remote sessions</span><br><span class="line">-session   optional     pam_reauthorize.so prepare</span><br></pre></td></tr></table></figure>
-
-<p>修改&#x2F;etc&#x2F;pam.d&#x2F;login文件，添加四行配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/pam.d/login</span><br><span class="line">auth       substack     password-auth</span><br><span class="line">account    include      password-auth</span><br><span class="line">password   include      password-auth</span><br><span class="line">session    include      password-auth</span><br></pre></td></tr></table></figure>
-
-<h1 id="创建三权分立账号"><a href="#创建三权分立账号" class="headerlink" title="创建三权分立账号"></a>创建三权分立账号</h1><h1 id><a href="#" class="headerlink" title></a><img src="/./images/20241028/image-20241028175718601.png" alt="image-20241028175718601"></h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.新建系统管理员</span><br><span class="line">useradd sysadmin</span><br><span class="line">passwd sysadmin</span><br><span class="line">新建安全管理员</span><br><span class="line">useradd secadmin</span><br><span class="line">passwd secadmin</span><br><span class="line">新建审计管理员</span><br><span class="line">useradd auditadmin</span><br><span class="line">passwd auditadmin</span><br><span class="line">2.修改visudo配置</span><br><span class="line">visudo </span><br><span class="line">#系统管理员</span><br><span class="line">Cmnd_Alias SOFTWARE = /bin/rpm, /usr/bin/up2date, /usr/bin/yum</span><br><span class="line">Cmnd_Alias SERVICES = /sbin/service, /sbin/chkconfig, /usr/bin/systemctl start, /usr/bin/systemctl stop, /usr/bin/systemctl reload, /usr/bin/systemctl restart, /usr/bin/systemctl status, /usr/bin/systemctl enable, /usr/bin/systemctl disable</span><br><span class="line">Cmnd_Alias STORAGE = /sbin/fdisk, /sbin/sfdisk, /sbin/parted, /sbin/partprobe, /bin/mount, /bin/umount</span><br><span class="line">sysadmin ALL=(root) SOFTWARE,SERVICES,STORAGE</span><br><span class="line"></span><br><span class="line">#安全管理员</span><br><span class="line">Cmnd_Alias DELEGATING = /usr/sbin/visudo, /bin/chown, /bin/chmod, /bin/chgrp</span><br><span class="line">Cmnd_Alias PROCESSES = /bin/nice, /bin/kill, /usr/bin/kill, /usr/bin/killall</span><br><span class="line">Cmnd_Alias NETWORKING = /sbin/route, /sbin/ifconfig, /bin/ping, /sbin/dhclient, /usr/bin/net, /sbin/iptables, /usr/bin/rfcomm, /usr/bin/wvdial, /sbin/iwconfig, /sbin/mii-tool</span><br><span class="line">secadmin ALL=(root) DELEGATING,PROCESSES,NETWORKING</span><br><span class="line"> </span><br><span class="line">#审计管理员的权限</span><br><span class="line">auditadmin ALL=(root) NOPASSWD:/usr/sbin/aureport,NOPASSWD:/usr/sbin/autrace,NOPASSWD:/usr/sbin/ausearch,NOPASSWD:/usr/sbin/audispd,NOPASSWD:/usr/sbin/auditctl</span><br><span class="line"> </span><br><span class="line">3.测试配置是否正确</span><br><span class="line">visudo -c</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
     <title>交换机ssh配置和密码策略</title>
     <url>/2024/10/30/20241030-20241030/</url>
     <content><![CDATA[<h1 id="华为交换机配置"><a href="#华为交换机配置" class="headerlink" title="华为交换机配置"></a>华为交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Huawei]set password min-length 8  //设置密码最小长度为8</span><br><span class="line">[Huawei]stelnet server enable      //开启ssh服务</span><br><span class="line">[Huawei]ssh client first-time enable  </span><br><span class="line">[Huawei]ssh server-source all-interface</span><br><span class="line">[Huawei]acl 2001</span><br><span class="line">[Huawei-acl-basic-2001]rule 5 permit source 1.1.1.1 0.0.0.255</span><br><span class="line">[Huawei]aaa</span><br><span class="line">[Huawei-aaa]local-aaa-user password policy administrator</span><br><span class="line">[Huawei-aaa]undo password alert original  //取消第一次登录修改密码</span><br><span class="line">[Huawei-aaa]password expire 90            //密码过期90天</span><br><span class="line">[Huawei-aaa]local-aaa-user wrong-password retry-interval 5 retry-time 5 block-time 10   //密码尝试登录失败5次，锁用户10分钟</span><br><span class="line">[Huawei-aaa]user-password complexity-check three-of-kinds    //设置密码为四选三复杂度检查功能</span><br><span class="line">[Huawei-aaa]local-user glxyxxk  password irreversible-cipher Glxy@2024 privilege level 15</span><br><span class="line">[Huawei-aaa]ocal-user user  password irreversible-cipher Glxy@2024 privilege level 1</span><br><span class="line">[Huawei-aaa]local-user user service-type ssh</span><br><span class="line">[Huawei]user-interface vty 0 4</span><br><span class="line">[Huawei-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[[Huawei-ui-vty0-4]acl 2001 inbound</span><br><span class="line">[Huawei-ui-vty0-4]protocol inbound ssh</span><br><span class="line">[Huawei-ui-vty0-4]idle-time 10 //10分钟不操作自动退出</span><br><span class="line">[Huawei]display local-aaa-user password policy administrator //检查配置</span><br><span class="line">[Huawei-aaa]display this     //检查配置</span><br></pre></td></tr></table></figure>
@@ -324,33 +324,14 @@
 ]]></content>
   </entry>
   <entry>
-    <title>负载均衡AD常用配置</title>
-    <url>/2024/11/11/20241111-20241111/</url>
-    <content><![CDATA[<h1 id="负载均衡AD常用配置"><a href="#负载均衡AD常用配置" class="headerlink" title="负载均衡AD常用配置"></a>负载均衡AD常用配置</h1><h2 id="部署配置"><a href="#部署配置" class="headerlink" title="部署配置"></a>部署配置</h2><p>AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。<br><img src="/./images/20241111/1731296098201.png" alt="1731296098201"></p>
-<h2 id="配置源NAT"><a href="#配置源NAT" class="headerlink" title="配置源NAT"></a>配置源NAT</h2><p><img src="/./images/20241111/image-20241111113639676.png" alt="image-20241111113639676"></p>
-<h2 id="配置目的nat"><a href="#配置目的nat" class="headerlink" title="配置目的nat"></a>配置目的nat</h2><p>网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT<br><img src="/./images/20241111/image-20241111114339043.png" alt="image-20241111114339043"><br>双向映射配置源NAT<br><img src="/./images/20241111/image-20241111114551419.png" alt="image-20241111114551419"></p>
-<h2 id="链路负载"><a href="#链路负载" class="headerlink" title="链路负载"></a>链路负载</h2><p>链路负载-智能路由，链路策略选择带宽比例或者加权最小流量<br><img src="/./images/20241111/1731296338531.png" alt="1731296338531"></p>
-<h2 id="应用负载"><a href="#应用负载" class="headerlink" title="应用负载"></a>应用负载</h2><p>配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。</p>
-<ol>
-<li><p>添加业务主机</p>
-<p>添加业务主机，填写内网服务器IP，选择ping来检测<img src="/./images/20241111/image-20241111152511246.png" alt="image-20241111152511246"></p>
-</li>
-<li><p>添加节点池<br>应用负载-节点池，添加节点池，填写内网服务器IP和端口。</p>
-<p><img src="/./images/20241111/image-20241111151327175.png" alt="image-20241111151327175"></p>
-</li>
-<li><p>配置虚拟服务</p>
-<p>一般用于灵活配置流量转发、业务高可用、安全防护，如根据业务数据灵活转发流量；<br>如业务流量过大，一台服务器无法承受时对业务进行扩容；如通过健康检查机制保证<br>业务高可用；如隐藏服务器真实IP或网站路径；如防止SYN FLOOD攻击、 HTTP攻击<br>等  </p>
-<p>应用负载-虚拟服务，添加虚拟服务IP地址填公网地址，外部使用https访问，端口填443，节点池选择刚才添加的80端口的节点。</p>
-<p><img src="/./images/20241111/1731309393336.jpg" alt="1731309393336"><br>开启HTTPS自动跳转，访问http域名的时候自动重定向为访问https<br><img src="/./images/20241111/1731309542404.jpg" alt="1731309542404"></p>
-</li>
-<li><p>导入SSL证书，一般为.cer、.crt、.p12、.pfx</p>
-<p><img src="/./images/20241111/image-20241111115723475.png" alt="image-20241111115723475"></p>
-</li>
-<li><p>配置SSL策略</p>
-<p>应用负载-SSL策略-SSL卸载策略，RSA服务器证书选择刚才导入的SSL证书。</p>
-<p><img src="/./images/20241111/image-20241111143742739.png" alt="image-20241111143742739"></p>
-</li>
-</ol>
+    <title>文件ACL</title>
+    <url>/2025/01/17/20250117-20250117/</url>
+    <content><![CDATA[<h1 id="文件访问控制列表（FACL）"><a href="#文件访问控制列表（FACL）" class="headerlink" title="文件访问控制列表（FACL）"></a>文件访问控制列表（FACL）</h1><p>FACL全称File Access Control Lists，可对某个指定的用户或组进行对某文件的单独的权限控制。如果针对某个目录设置了ACL，则目录中的文件会继承其权限；若针对文件设置了ACL，则文件不再继承其所在目录的权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FACL 设置命令与常用参数详解</span><br><span class="line">用法: setfacl [-bkndRLP] &#123; -m|-M|-x|-X ... &#125; file ...</span><br><span class="line">m: 修改权限</span><br><span class="line">x: 删除某个权限</span><br><span class="line">b: 删除所有权限</span><br><span class="line">R: 递归子目录</span><br><span class="line">查看文件ACL</span><br><span class="line">getfacl 文件路径</span><br><span class="line">ls -l 用命令也可查看文件是否有FACL，不过只能是否有（看权限信息的结尾是否有+号），不能知道有什么</span><br><span class="line">ls -l 下查看的rwx是mask权限而不是平常的文件permission。</span><br><span class="line"></span><br><span class="line">查看/tmp文件下的FACL或查看/tmp/test.txt单独的FACL。  </span><br><span class="line">getfacl /tmp 或 getfacl /tmp/test.txt</span><br><span class="line">#后面的是默认权限，没有#的是FACL权限。</span><br><span class="line">user::rwx表示用户的权限为rwx，单独为某一个用户设定权限为r--则他的权限取小的值为r--。</span><br><span class="line">user::和group::定义的同时定义了mask，谁的权限大，mask就取谁的权限。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../../images/20250117/image-20241231145346569-1737092213955-7-1737094084871-8.png" alt="image-20241231145346569-1737092213955-7-1737094084871-8"><img src="/./../../images/20250117/image-20241231145449933.png" alt="image-20241231145449933"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置文件的facl权限</span><br><span class="line">setfacl -m 身份：名称：权限 文件路径</span><br><span class="line"></span><br><span class="line">为用户test添加/tmp/test.txt的所有权限</span><br><span class="line">setfacl -m u:test:rw /tmp/test.txt</span><br><span class="line">为用户组testg添加/tmp/test.txt的无权限</span><br><span class="line">setfacl -m g:testg:--- /tmp/test.txt</span><br><span class="line">删除用户test关于/tmp/test的执行权限</span><br><span class="line">setfacl -x u:test:x /tmp/test.txt</span><br><span class="line"></span><br><span class="line">如果遇到设置的用户权限与mask权限冲突,则用户的权限为effective权限。</span><br><span class="line">使用setfacl -Rm m::rwx 文件路径 </span><br><span class="line">将文件目录下的所有文件重新修改一次mask，否则可能只针对新增加的文件生效。</span><br></pre></td></tr></table></figure>
+
 ]]></content>
   </entry>
   <entry>
@@ -387,14 +368,33 @@
 ]]></content>
   </entry>
   <entry>
-    <title>文件ACL</title>
-    <url>/2025/01/17/20250117-20250117/</url>
-    <content><![CDATA[<h1 id="文件访问控制列表（FACL）"><a href="#文件访问控制列表（FACL）" class="headerlink" title="文件访问控制列表（FACL）"></a>文件访问控制列表（FACL）</h1><p>FACL全称File Access Control Lists，可对某个指定的用户或组进行对某文件的单独的权限控制。如果针对某个目录设置了ACL，则目录中的文件会继承其权限；若针对文件设置了ACL，则文件不再继承其所在目录的权限。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FACL 设置命令与常用参数详解</span><br><span class="line">用法: setfacl [-bkndRLP] &#123; -m|-M|-x|-X ... &#125; file ...</span><br><span class="line">m: 修改权限</span><br><span class="line">x: 删除某个权限</span><br><span class="line">b: 删除所有权限</span><br><span class="line">R: 递归子目录</span><br><span class="line">查看文件ACL</span><br><span class="line">getfacl 文件路径</span><br><span class="line">ls -l 用命令也可查看文件是否有FACL，不过只能是否有（看权限信息的结尾是否有+号），不能知道有什么</span><br><span class="line">ls -l 下查看的rwx是mask权限而不是平常的文件permission。</span><br><span class="line"></span><br><span class="line">查看/tmp文件下的FACL或查看/tmp/test.txt单独的FACL。  </span><br><span class="line">getfacl /tmp 或 getfacl /tmp/test.txt</span><br><span class="line">#后面的是默认权限，没有#的是FACL权限。</span><br><span class="line">user::rwx表示用户的权限为rwx，单独为某一个用户设定权限为r--则他的权限取小的值为r--。</span><br><span class="line">user::和group::定义的同时定义了mask，谁的权限大，mask就取谁的权限。</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../../images/20250117/image-20241231145346569-1737092213955-7-1737094084871-8.png" alt="image-20241231145346569-1737092213955-7-1737094084871-8"><img src="/./../../images/20250117/image-20241231145449933.png" alt="image-20241231145449933"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置文件的facl权限</span><br><span class="line">setfacl -m 身份：名称：权限 文件路径</span><br><span class="line"></span><br><span class="line">为用户test添加/tmp/test.txt的所有权限</span><br><span class="line">setfacl -m u:test:rw /tmp/test.txt</span><br><span class="line">为用户组testg添加/tmp/test.txt的无权限</span><br><span class="line">setfacl -m g:testg:--- /tmp/test.txt</span><br><span class="line">删除用户test关于/tmp/test的执行权限</span><br><span class="line">setfacl -x u:test:x /tmp/test.txt</span><br><span class="line"></span><br><span class="line">如果遇到设置的用户权限与mask权限冲突,则用户的权限为effective权限。</span><br><span class="line">使用setfacl -Rm m::rwx 文件路径 </span><br><span class="line">将文件目录下的所有文件重新修改一次mask，否则可能只针对新增加的文件生效。</span><br></pre></td></tr></table></figure>
-
+    <title>负载均衡AD常用配置</title>
+    <url>/2024/11/11/20241111-20241111/</url>
+    <content><![CDATA[<h1 id="负载均衡AD常用配置"><a href="#负载均衡AD常用配置" class="headerlink" title="负载均衡AD常用配置"></a>负载均衡AD常用配置</h1><h2 id="部署配置"><a href="#部署配置" class="headerlink" title="部署配置"></a>部署配置</h2><p>AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。<br><img src="/./images/20241111/1731296098201.png" alt="1731296098201"></p>
+<h2 id="配置源NAT"><a href="#配置源NAT" class="headerlink" title="配置源NAT"></a>配置源NAT</h2><p><img src="/./images/20241111/image-20241111113639676.png" alt="image-20241111113639676"></p>
+<h2 id="配置目的nat"><a href="#配置目的nat" class="headerlink" title="配置目的nat"></a>配置目的nat</h2><p>网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT<br><img src="/./images/20241111/image-20241111114339043.png" alt="image-20241111114339043"><br>双向映射配置源NAT<br><img src="/./images/20241111/image-20241111114551419.png" alt="image-20241111114551419"></p>
+<h2 id="链路负载"><a href="#链路负载" class="headerlink" title="链路负载"></a>链路负载</h2><p>链路负载-智能路由，链路策略选择带宽比例或者加权最小流量<br><img src="/./images/20241111/1731296338531.png" alt="1731296338531"></p>
+<h2 id="应用负载"><a href="#应用负载" class="headerlink" title="应用负载"></a>应用负载</h2><p>配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。</p>
+<ol>
+<li><p>添加业务主机</p>
+<p>添加业务主机，填写内网服务器IP，选择ping来检测<img src="/./images/20241111/image-20241111152511246.png" alt="image-20241111152511246"></p>
+</li>
+<li><p>添加节点池<br>应用负载-节点池，添加节点池，填写内网服务器IP和端口。</p>
+<p><img src="/./images/20241111/image-20241111151327175.png" alt="image-20241111151327175"></p>
+</li>
+<li><p>配置虚拟服务</p>
+<p>一般用于灵活配置流量转发、业务高可用、安全防护，如根据业务数据灵活转发流量；<br>如业务流量过大，一台服务器无法承受时对业务进行扩容；如通过健康检查机制保证<br>业务高可用；如隐藏服务器真实IP或网站路径；如防止SYN FLOOD攻击、 HTTP攻击<br>等  </p>
+<p>应用负载-虚拟服务，添加虚拟服务IP地址填公网地址，外部使用https访问，端口填443，节点池选择刚才添加的80端口的节点。</p>
+<p><img src="/./images/20241111/1731309393336.jpg" alt="1731309393336"><br>开启HTTPS自动跳转，访问http域名的时候自动重定向为访问https<br><img src="/./images/20241111/1731309542404.jpg" alt="1731309542404"></p>
+</li>
+<li><p>导入SSL证书，一般为.cer、.crt、.p12、.pfx</p>
+<p><img src="/./images/20241111/image-20241111115723475.png" alt="image-20241111115723475"></p>
+</li>
+<li><p>配置SSL策略</p>
+<p>应用负载-SSL策略-SSL卸载策略，RSA服务器证书选择刚才导入的SSL证书。</p>
+<p><img src="/./images/20241111/image-20241111143742739.png" alt="image-20241111143742739"></p>
+</li>
+</ol>
 ]]></content>
   </entry>
   <entry>
@@ -406,31 +406,6 @@
 <p>登录账号和密码不同：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import paramiko</span><br><span class="line">import time</span><br><span class="line">import os</span><br><span class="line">from getpass import getpass</span><br><span class="line">#user = input(&#x27;Username:&#x27;)</span><br><span class="line">#pw = getpass(&#x27;password:&#x27;)</span><br><span class="line">f = open(&quot;ip-list.txt&quot;,&quot;r&quot;)                   //需在脚本同路径下创建ip-list.txt</span><br><span class="line">for line in f.readlines():</span><br><span class="line">  local = time.strftime(&#x27;(%Y%m%d)&#x27;)</span><br><span class="line">  ip,user,pw = line.strip().split(&#x27;,&#x27;)        //格式按照ip,用户名，密码填</span><br><span class="line">  ssh = paramiko.SSHClient()</span><br><span class="line">  ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">  ssh.connect(hostname=ip,username=user,password=pw)</span><br><span class="line">  print(&quot;成功登录&quot;,ip)</span><br><span class="line">  command =  ssh.invoke_shell()</span><br><span class="line">  command.send(&quot;screen-length disable\n&quot;)</span><br><span class="line">  command.send(&quot;screen-length 0 tem\n&quot;)</span><br><span class="line">  command.send(&quot;dis device\n&quot;)</span><br><span class="line">  command.send(&quot;dis version\n&quot;)</span><br><span class="line">  command.send(&quot;dis logbuffer size 20\n&quot;)</span><br><span class="line">  command.send(&quot;dis cu\n&quot;)</span><br><span class="line">  time.sleep(70)                   //控制每次循环时间为70s，有些交换机反应慢的，时间需要往上加</span><br><span class="line">  output = command.recv(65535).decode(&#x27;utf-8&#x27;,&#x27;ignore&#x27;)</span><br><span class="line">  print(output)</span><br><span class="line">  folder_path = f&#x27;xjconfig/&#123;local&#125;&#x27;   //需在脚本同路径下创建xjconfig文件夹</span><br><span class="line">  if not os.path.exists(folder_path):</span><br><span class="line">    os.makedirs(folder_path)        //在xjconfig里生成当天的文件夹</span><br><span class="line">  file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;.txt&#x27;</span><br><span class="line">  temp_file_path = f&#x27;&#123;folder_path&#125;/&#123;ip&#125;&#123;local&#125;_temp.txt&#x27; //输出里有gbk编码的话，可能会报错</span><br><span class="line">  with open(temp_file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    temp_file.write(output)</span><br><span class="line"># 读取临时文件并重新以 utf-8 编码写入最终文件</span><br><span class="line">  with open(temp_file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as temp_file:</span><br><span class="line">    content = temp_file.read()</span><br><span class="line">  with open(file_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as final_file:</span><br><span class="line">    final_file.write(content)</span><br><span class="line">  # 删除临时文件</span><br><span class="line">  os.remove(temp_file_path)</span><br><span class="line">ssh.close()</span><br></pre></td></tr></table></figure>
 
-]]></content>
-  </entry>
-  <entry>
-    <title>关于爱情令人不解的一切</title>
-    <url>/2025/02/05/20250205-20250205/</url>
-    <content><![CDATA[<h1 id="关于爱情令人不解的一切"><a href="#关于爱情令人不解的一切" class="headerlink" title="关于爱情令人不解的一切"></a>关于爱情令人不解的一切</h1><h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>​		距离本身并不存在，它很大程度上只是你主观意识的产物，也就是你觉得和一个人距离近就近，和他远就远，一切都取决于你而已。</p>
-<p>​		比如自来熟他主观上认为你是他的朋友，他挽着你的手臂或者熟络地跟你聊很多很多东西，从而他自己创造这么一种气场和氛围，让你觉得好像你们也已经是认识很久的朋友，然后这种气场会真的推进你们成为真正的朋友。</p>
-<p>​		所以人际关系中的距离其实是一个非常简单的东西，你觉得近就近，你觉得远就远，如果你主观意识上把人际关系想的非常复杂，你看到一个人你想认识她，但是你扭扭捏捏不敢接近，你心里活动越多，它本质上就真的变得越来越复杂，但是它客观上可能没有那么复杂。</p>
-<p>​		自来熟是对方不是你的朋友，但是你把对方当朋友来相处，从而你们之间有朋友的那种氛围。调情就是无论对方现在是不是你的情人，你都把他当一个情人来相处，从而你对他的眼神，你跟他说话的方式，你的肢体语言都开始有了一些暧昧的意味。所以其实调情它本质上就是从一个人的主观世界出发把对方当做自己的情人，从而他真的可以创造出这种浪漫的氛围，而推动对方真正地成为自己的情人。</p>
-<h2 id="告白"><a href="#告白" class="headerlink" title="告白"></a>告白</h2><p>​		如果我对一个人产生了很大的兴趣，我不会在我跟他吃饭的时候，突然一本正经的问他”我现在可以和你调情吗“，直接上就是了。同理你如果想和一个人成为男女朋友，其实你没有必要在最开始问“我可以成为你的男女朋友吗”，你直接追求和他男女朋友的那种状态就可以了，你直接和他一起做一些男女朋友可能会做的一些活动，比如说你们单独吃饭，比如说你们去电影院，然后如果他同意出来了，他客观上是不是你男女朋友又有什么呢。</p>
-<p>​		但是在你们没有达到那种很暧昧的状态，你就跟对方表白，对方会有一种被成交的感觉（对方有求于我，然后我必须给出一个答案，或者给出一个承诺），比如在服装店和售楼部里一样，会从感性马上回归理性，然后开始做计算。</p>
-<p>​		状态大于拥有，你首先去追求和他像男女朋友一样的状态，然后逐渐再过渡到拥有的这个标志点。但不要在关系正式确立前，付出太多实质性的东西。（否则对方缺乏给更多承诺的理由）实际上从哲学的意义上来说，我们的一生都无法真正拥有任何东西，你连你自己的生命都抓不住，你必定要经过生老病死的这个过程，你怎么还奢求去抓住爱情这么变幻不定，这么虚无缥缈的东西呢。</p>
-<p>​		你连你自己都改变不了，你每天发多少誓，要开始减肥，要开始锻炼，要早睡早起，请问你成功改变自己了吗，你连自己都改变不了，为什么要奢求去改变另外一个人，把她变成你喜欢的样子呢，所以我们不用去尝试抓住任何，注定要离我们而去的东西，也不用去改变对方，我们就给别人自由，让自己成长。</p>
-<h2 id="吸引"><a href="#吸引" class="headerlink" title="吸引"></a>吸引</h2><p>​		前面讲了距离很大程度上只是你主观意识的产物，而我们要去追求一种主观意识可以所影响的“状态”，再从这种“状态”过渡到“拥有”，而不是一上去就追求拥有。</p>
-<p>​		这个世界上并不存在被一个人吸引这件事情，我们从来都不是被一个人吸引，而是被这个人的“世界”所吸引。有几种男生是不缺女朋友的，第一种是在一个领域内做到非常擅长和顶尖的男生。第二种就是会才艺的男生，艺术的魅力。第三种就是经常处于焦点的男生，他们的受众面很广，而这个受众里面肯定有被他们所吸引的人。这就是焦点效应，目光聚集之处必定有魔力发生。</p>
-<p>​		但无论是顶尖、才艺还是焦点，本质上吸引他人的都是我们的世界。人在什么状态下最有魅力，人一定是在专注的状态下最有魅力，因为在专注的状态下，你跟你从事的这个东西合二为一，从而形成一种非常强大的磁场，形成一种神奇的吸引力。正因为吸引他人的其实是我们的世界，所以当我们爱上一个人，并且因为这个人而逐渐失去我们的世界，当对方完全成为你的世界，而你丧失了自我，这个时候你对对方的吸引力就为0，一个丧失了自我，丧失了自己的世界的人，是对他人构成不了吸引力的，永远不要把一个人当成你的世界，不要把一个人的自由意志，当成你的最高信条。被吸引的人会自动被我们所吸引，而不被我们所吸引的人，是因为他们没有在我们的世界中看到他们所需要的东西，所以一个人对你冷淡，或者不回应，或者不冷不热，本质上这个信号就是，他不需要你。</p>
-<p>​		而这也并不代表你有什么问题，因为萝卜白菜各有所爱，如果一个人在你身上看到了他所需要的东西，那么你踢他都是踢不走的，我们每个人本身就是一团需求，然后可能有些人会满足我们的需求，而在有些人那里，他们提供不了我们所想要的，这都是非常正常的事情，你也不需要去纠缠他们，我们要做的只是“展示”而已，当我们展示完了之后，对方依然没有被我们吸引，那我们就随缘就行了。</p>
-<h2 id="激情"><a href="#激情" class="headerlink" title="激情"></a>激情</h2><p>​		恋爱初期的激情，本质上就是由三个字驱动，叫做“好奇心”，你看到一个人，她这么光鲜，这么漂亮，她的世界是那么的有趣，你好想去探个究竟，这种探个究竟的想法，就是你被这个人吸引的感觉。但是探个究竟之后还剩下什么，这个就是问题，所以爱情的保鲜，归根到底就是三个字，神秘感。</p>
-<p>​		用神秘感去调动对面的好奇心，对方就是冲着这种未知性，就是你身上还有他没有明白，他想搞清楚的地方，他才会一直不断地想接近你，一个人对你的想像空间，就是他对你的想念空间。所以即使你跟一个人在一起了，也要学会四个字，叫“点到为止”。过度享乐的后果就是很快没感觉，为了防止过度享乐，最好的方法就是你有你自己的世界，无论这是你的事业还是你的社交圈，如果你们已经知根知底了怎么办，你可以保持你的世界不断变化，不断的变化，就是不断的神秘感和未知感的来源。</p>
-<p>​		除了点到为止，不断变化，关于神秘感还有一点，就是你的内在要大于外在，“国之利器不能示于人”。所以我们一定要构建自己的世界，并且这种世界它是随时间而增值的。</p>
-<h2 id="平淡"><a href="#平淡" class="headerlink" title="平淡"></a>平淡</h2><p>​		所有激情的本质都是一种“中毒”，你在中毒的时候会觉得对方是你的唯一，是你的永恒，但是等毒性退散之后你恢复正常了，你会发现对方不一定是适合长期生活或者过日子的人。所以当我们在考虑结婚对象的时候，所谓的来电或者激情，它其实不应该成为一种主要的考虑因素，因为无论激情再怎么强烈，它都是一种会随时间退散的东西，那你在考虑结婚对象的时候应该考虑的是舒服。</p>
-<p>​		舒服的意思就是，你跟这个人相处不累，如果你觉得一个人很有魅力，但是你跟他在一起就是会特别累。因为我们平时为生活奔波已经很辛苦了，不希望在家里再找一个祖宗伺候对吧，其实人和人的相处和交流本身，就是很累的，因为我们大家都有不一样的价值观，你如果觉得和一个人相处起来特别舒服，那基本上肯定是对方在某种程度上让步或者妥协，或者说你们双方都在让步和妥协，才会有一段非常愉快的交流。因为自然状态下，人和人放在一起是势必会起冲突的。</p>
-<p>​		所以大家首先接受人和人的交流，相处本来就是很累的，但是在这个基础上，你选择长期生活的结婚伴侣，要挑选一个相处起来不那么累的。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​		一切吸引的本质，都并不是被一个人所吸引，而是被一个人的世界所吸引，我们永远要有自己的世界，不要把另外一个人当成我们全部的世界，不要把另外一个人的自由意志，当成我们的最高信条，爱情由神秘感驱动，神秘感背后是好奇心，好奇心并不是一种很高级的东西，你对很多人都可以有好奇心，但是关怀和呵护是一种很高级并且很了不起的东西，长期的相处要看舒服而不是激情，激情必然退散，而舒服可以决定你和一个人是否融洽的走得更长久，你和一个人的激情必将退散，也可能会不断对新的人产生新的激情，但是如果这种新的激情是你愿意放下一切去追求的，那么你这辈子可能每两年都要离一次婚，有些想法本身并没有错，但是对他人的伤害一定会伴随相应的代价，任何人的成功都离不开其他人的养分输送，所以学会及时安顿好对方的情，并且不要丧失对任何人的敬畏之心，谨记这些你会离幸福更近。</p>
-<p><a href="https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64%E3%80%90%E4%BA%BA%E9%99%85%E5%89%96%E6%9E%904%E3%80%91%E5%85%B3%E4%BA%8E%E7%88%B1%E6%83%85%E4%BB%A4%E4%BA%BA%E4%B8%8D%E8%A7%A3%E7%9A%84%E4%B8%80%E5%88%87">https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64【人际剖析4】关于爱情令人不解的一切</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -458,6 +433,31 @@
 
 <p>华三设备不需要配置arp broadcast enable</p>
 <h1 id="安全设备的业务网段需要和其他管理网段通信"><a href="#安全设备的业务网段需要和其他管理网段通信" class="headerlink" title="安全设备的业务网段需要和其他管理网段通信"></a>安全设备的业务网段需要和其他管理网段通信</h1><p>安全设备1 业务口(ETH1)IP：192.168.254.1 管理口(ETH0)IP：192.168.253.1<br>配置了默认路由0.0.0.0&#x2F;0 192.168.254.254<br>安全设备2 管理口和业务口同一IP：192.168.253.2<br>192.168.254.0&#x2F;24和192.168.253.0&#x2F;24的网关在同一台交换机上<br>现象：发现安全设备1的192.168.254.1不通192.168.253.2<br>原因：安全设备存在直连路由，192.168.253.0&#x2F;24的路由走管理口eth0到网关192.168.253.254，会导致来回路径不一致的问题。需要安全设备1上配置明细路由，ip route-static 192.168.253.2&#x2F;32 192.168.254.254。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>关于爱情令人不解的一切</title>
+    <url>/2025/02/05/20250205-20250205/</url>
+    <content><![CDATA[<h1 id="关于爱情令人不解的一切"><a href="#关于爱情令人不解的一切" class="headerlink" title="关于爱情令人不解的一切"></a>关于爱情令人不解的一切</h1><h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>​		距离本身并不存在，它很大程度上只是你主观意识的产物，也就是你觉得和一个人距离近就近，和他远就远，一切都取决于你而已。</p>
+<p>​		比如自来熟他主观上认为你是他的朋友，他挽着你的手臂或者熟络地跟你聊很多很多东西，从而他自己创造这么一种气场和氛围，让你觉得好像你们也已经是认识很久的朋友，然后这种气场会真的推进你们成为真正的朋友。</p>
+<p>​		所以人际关系中的距离其实是一个非常简单的东西，你觉得近就近，你觉得远就远，如果你主观意识上把人际关系想的非常复杂，你看到一个人你想认识她，但是你扭扭捏捏不敢接近，你心里活动越多，它本质上就真的变得越来越复杂，但是它客观上可能没有那么复杂。</p>
+<p>​		自来熟是对方不是你的朋友，但是你把对方当朋友来相处，从而你们之间有朋友的那种氛围。调情就是无论对方现在是不是你的情人，你都把他当一个情人来相处，从而你对他的眼神，你跟他说话的方式，你的肢体语言都开始有了一些暧昧的意味。所以其实调情它本质上就是从一个人的主观世界出发把对方当做自己的情人，从而他真的可以创造出这种浪漫的氛围，而推动对方真正地成为自己的情人。</p>
+<h2 id="告白"><a href="#告白" class="headerlink" title="告白"></a>告白</h2><p>​		如果我对一个人产生了很大的兴趣，我不会在我跟他吃饭的时候，突然一本正经的问他”我现在可以和你调情吗“，直接上就是了。同理你如果想和一个人成为男女朋友，其实你没有必要在最开始问“我可以成为你的男女朋友吗”，你直接追求和他男女朋友的那种状态就可以了，你直接和他一起做一些男女朋友可能会做的一些活动，比如说你们单独吃饭，比如说你们去电影院，然后如果他同意出来了，他客观上是不是你男女朋友又有什么呢。</p>
+<p>​		但是在你们没有达到那种很暧昧的状态，你就跟对方表白，对方会有一种被成交的感觉（对方有求于我，然后我必须给出一个答案，或者给出一个承诺），比如在服装店和售楼部里一样，会从感性马上回归理性，然后开始做计算。</p>
+<p>​		状态大于拥有，你首先去追求和他像男女朋友一样的状态，然后逐渐再过渡到拥有的这个标志点。但不要在关系正式确立前，付出太多实质性的东西。（否则对方缺乏给更多承诺的理由）实际上从哲学的意义上来说，我们的一生都无法真正拥有任何东西，你连你自己的生命都抓不住，你必定要经过生老病死的这个过程，你怎么还奢求去抓住爱情这么变幻不定，这么虚无缥缈的东西呢。</p>
+<p>​		你连你自己都改变不了，你每天发多少誓，要开始减肥，要开始锻炼，要早睡早起，请问你成功改变自己了吗，你连自己都改变不了，为什么要奢求去改变另外一个人，把她变成你喜欢的样子呢，所以我们不用去尝试抓住任何，注定要离我们而去的东西，也不用去改变对方，我们就给别人自由，让自己成长。</p>
+<h2 id="吸引"><a href="#吸引" class="headerlink" title="吸引"></a>吸引</h2><p>​		前面讲了距离很大程度上只是你主观意识的产物，而我们要去追求一种主观意识可以所影响的“状态”，再从这种“状态”过渡到“拥有”，而不是一上去就追求拥有。</p>
+<p>​		这个世界上并不存在被一个人吸引这件事情，我们从来都不是被一个人吸引，而是被这个人的“世界”所吸引。有几种男生是不缺女朋友的，第一种是在一个领域内做到非常擅长和顶尖的男生。第二种就是会才艺的男生，艺术的魅力。第三种就是经常处于焦点的男生，他们的受众面很广，而这个受众里面肯定有被他们所吸引的人。这就是焦点效应，目光聚集之处必定有魔力发生。</p>
+<p>​		但无论是顶尖、才艺还是焦点，本质上吸引他人的都是我们的世界。人在什么状态下最有魅力，人一定是在专注的状态下最有魅力，因为在专注的状态下，你跟你从事的这个东西合二为一，从而形成一种非常强大的磁场，形成一种神奇的吸引力。正因为吸引他人的其实是我们的世界，所以当我们爱上一个人，并且因为这个人而逐渐失去我们的世界，当对方完全成为你的世界，而你丧失了自我，这个时候你对对方的吸引力就为0，一个丧失了自我，丧失了自己的世界的人，是对他人构成不了吸引力的，永远不要把一个人当成你的世界，不要把一个人的自由意志，当成你的最高信条。被吸引的人会自动被我们所吸引，而不被我们所吸引的人，是因为他们没有在我们的世界中看到他们所需要的东西，所以一个人对你冷淡，或者不回应，或者不冷不热，本质上这个信号就是，他不需要你。</p>
+<p>​		而这也并不代表你有什么问题，因为萝卜白菜各有所爱，如果一个人在你身上看到了他所需要的东西，那么你踢他都是踢不走的，我们每个人本身就是一团需求，然后可能有些人会满足我们的需求，而在有些人那里，他们提供不了我们所想要的，这都是非常正常的事情，你也不需要去纠缠他们，我们要做的只是“展示”而已，当我们展示完了之后，对方依然没有被我们吸引，那我们就随缘就行了。</p>
+<h2 id="激情"><a href="#激情" class="headerlink" title="激情"></a>激情</h2><p>​		恋爱初期的激情，本质上就是由三个字驱动，叫做“好奇心”，你看到一个人，她这么光鲜，这么漂亮，她的世界是那么的有趣，你好想去探个究竟，这种探个究竟的想法，就是你被这个人吸引的感觉。但是探个究竟之后还剩下什么，这个就是问题，所以爱情的保鲜，归根到底就是三个字，神秘感。</p>
+<p>​		用神秘感去调动对面的好奇心，对方就是冲着这种未知性，就是你身上还有他没有明白，他想搞清楚的地方，他才会一直不断地想接近你，一个人对你的想像空间，就是他对你的想念空间。所以即使你跟一个人在一起了，也要学会四个字，叫“点到为止”。过度享乐的后果就是很快没感觉，为了防止过度享乐，最好的方法就是你有你自己的世界，无论这是你的事业还是你的社交圈，如果你们已经知根知底了怎么办，你可以保持你的世界不断变化，不断的变化，就是不断的神秘感和未知感的来源。</p>
+<p>​		除了点到为止，不断变化，关于神秘感还有一点，就是你的内在要大于外在，“国之利器不能示于人”。所以我们一定要构建自己的世界，并且这种世界它是随时间而增值的。</p>
+<h2 id="平淡"><a href="#平淡" class="headerlink" title="平淡"></a>平淡</h2><p>​		所有激情的本质都是一种“中毒”，你在中毒的时候会觉得对方是你的唯一，是你的永恒，但是等毒性退散之后你恢复正常了，你会发现对方不一定是适合长期生活或者过日子的人。所以当我们在考虑结婚对象的时候，所谓的来电或者激情，它其实不应该成为一种主要的考虑因素，因为无论激情再怎么强烈，它都是一种会随时间退散的东西，那你在考虑结婚对象的时候应该考虑的是舒服。</p>
+<p>​		舒服的意思就是，你跟这个人相处不累，如果你觉得一个人很有魅力，但是你跟他在一起就是会特别累。因为我们平时为生活奔波已经很辛苦了，不希望在家里再找一个祖宗伺候对吧，其实人和人的相处和交流本身，就是很累的，因为我们大家都有不一样的价值观，你如果觉得和一个人相处起来特别舒服，那基本上肯定是对方在某种程度上让步或者妥协，或者说你们双方都在让步和妥协，才会有一段非常愉快的交流。因为自然状态下，人和人放在一起是势必会起冲突的。</p>
+<p>​		所以大家首先接受人和人的交流，相处本来就是很累的，但是在这个基础上，你选择长期生活的结婚伴侣，要挑选一个相处起来不那么累的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​		一切吸引的本质，都并不是被一个人所吸引，而是被一个人的世界所吸引，我们永远要有自己的世界，不要把另外一个人当成我们全部的世界，不要把另外一个人的自由意志，当成我们的最高信条，爱情由神秘感驱动，神秘感背后是好奇心，好奇心并不是一种很高级的东西，你对很多人都可以有好奇心，但是关怀和呵护是一种很高级并且很了不起的东西，长期的相处要看舒服而不是激情，激情必然退散，而舒服可以决定你和一个人是否融洽的走得更长久，你和一个人的激情必将退散，也可能会不断对新的人产生新的激情，但是如果这种新的激情是你愿意放下一切去追求的，那么你这辈子可能每两年都要离一次婚，有些想法本身并没有错，但是对他人的伤害一定会伴随相应的代价，任何人的成功都离不开其他人的养分输送，所以学会及时安顿好对方的情，并且不要丧失对任何人的敬畏之心，谨记这些你会离幸福更近。</p>
+<p><a href="https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64%E3%80%90%E4%BA%BA%E9%99%85%E5%89%96%E6%9E%904%E3%80%91%E5%85%B3%E4%BA%8E%E7%88%B1%E6%83%85%E4%BB%A4%E4%BA%BA%E4%B8%8D%E8%A7%A3%E7%9A%84%E4%B8%80%E5%88%87">https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64【人际剖析4】关于爱情令人不解的一切</a></p>
 ]]></content>
   </entry>
   <entry>
