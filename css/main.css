@@ -179,7 +179,7 @@ body {
   color: var(--text-color);
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 20px;
-  line-height: 2;
+  line-height: 1.2;
 }
 @media (max-width: 991px) {
   body {
@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #f44b21;
+  background: #ffc4bd;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1396,7 +1396,7 @@ pre .javascript .function {
 }
 .languages {
   display: inline-block;
-  font-size: 13px;
+  font-size: 17px;
   position: relative;
 }
 .languages .lang-select-label span {
@@ -1518,7 +1518,7 @@ pre .javascript .function {
 }
 @media (min-width: 1200px) {
   .post-body {
-    font-size: 13px;
+    font-size: 17px;
   }
 }
 .post-body .exturl .fa {
@@ -1567,7 +1567,7 @@ pre .javascript .function {
   }
 }
 .posts-collapse .collection-title {
-  font-size: 13px;
+  font-size: 17px;
   position: relative;
 }
 .posts-collapse .collection-title::before {
@@ -2481,4 +2481,11 @@ hr {
 }
 .sub-menu .menu-item {
   display: inline-block;
+}
+.post-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 控制显示行数 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
