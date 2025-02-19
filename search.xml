@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>华三交换机同步ntp</title>
-    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
-    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
-
-<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
-
-<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
     <title>123</title>
     <url>/2024/08/21/123/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
@@ -32,22 +18,6 @@
       <tags>
         <tag>encryptAsDiary</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>burp使用captcha-killer-modified插件</title>
-    <url>/2024/08/22/20240822-20240822/</url>
-    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
-<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
-<hr>
-<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
-<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
-<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
-<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
-<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
-<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
-<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
-<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
-]]></content>
   </entry>
   <entry>
     <title>交换机hybrid接口配置</title>
@@ -69,6 +39,20 @@
 <h1 id="华三交换机配置"><a href="#华三交换机配置" class="headerlink" title="华三交换机配置"></a>华三交换机配置</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface Gi0/0/2</span><br><span class="line">[LSW4]port link-type trunk //交换机之间使用trunk类型透传需要的VLAN</span><br><span class="line">[LSW4]port trunk allow-pass vlan all</span><br><span class="line">[LSW4]vlan batch 114 116</span><br><span class="line">[LSW4-vlan 116]ip-subnet-vlan 1 ip 192.168.116.0 255.255.255.0 //IP地址为192.168.116.0/24，在VLAN 1160域内转发</span><br><span class="line">[LSW4-vlan 120]ip-subnet-vlan 1 ip 192.168.120.0 255.255.255.0 //IP地址为192.168.120.0/24，在VLAN 120域内转发</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[LSW4]interface GigabitEthernet0/0/1</span><br><span class="line">[LSW4]port link-type hybrid //基于IP子网划分VLAN只能应用在类型为hybrid的接口</span><br><span class="line">[LSW4]undo port hybrid vlan 1</span><br><span class="line">[LSW4]port hybrid 116 120 untagged//对VLAN为100、200、300的报文，剥掉VLAN Tag</span><br><span class="line">[LSW4]ip-subnet-vlan enable //使能接口的IP-VLAN功能</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 116</span><br><span class="line">[LSW4]port hybrid ip-subnet-vlan vlan 120</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>华三交换机同步ntp</title>
+    <url>/2024/08/22/20240821-%E5%8D%8E%E4%B8%89%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%90%8C%E6%AD%A5ntp/</url>
+    <content><![CDATA[<p>华三核心交换机配置为ntp服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service refclock-master 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的汇聚交换机和楼层交换机从核心交换机同步时间</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch]ntp-service enable</span><br><span class="line">[Switch]ntp-service unicast-server 1.0.1.11</span><br><span class="line">[Switch]display ntp status</span><br></pre></td></tr></table></figure>
+
+<p>显示已经同步成功了，但是时间显示还是不对，查文档汇聚交换机和楼层交换机上还需要配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Switch] undo clock pro</span><br><span class="line">[Switch] clock timezone beijing add 8</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
@@ -324,14 +308,49 @@
 ]]></content>
   </entry>
   <entry>
-    <title>文件ACL</title>
-    <url>/2025/01/17/20250117-20250117/</url>
-    <content><![CDATA[<h1 id="文件访问控制列表（FACL）"><a href="#文件访问控制列表（FACL）" class="headerlink" title="文件访问控制列表（FACL）"></a>文件访问控制列表（FACL）</h1><p>FACL全称File Access Control Lists，可对某个指定的用户或组进行对某文件的单独的权限控制。如果针对某个目录设置了ACL，则目录中的文件会继承其权限；若针对文件设置了ACL，则文件不再继承其所在目录的权限。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FACL 设置命令与常用参数详解</span><br><span class="line">用法: setfacl [-bkndRLP] &#123; -m|-M|-x|-X ... &#125; file ...</span><br><span class="line">m: 修改权限</span><br><span class="line">x: 删除某个权限</span><br><span class="line">b: 删除所有权限</span><br><span class="line">R: 递归子目录</span><br><span class="line">查看文件ACL</span><br><span class="line">getfacl 文件路径</span><br><span class="line">ls -l 用命令也可查看文件是否有FACL，不过只能是否有（看权限信息的结尾是否有+号），不能知道有什么</span><br><span class="line">ls -l 下查看的rwx是mask权限而不是平常的文件permission。</span><br><span class="line"></span><br><span class="line">查看/tmp文件下的FACL或查看/tmp/test.txt单独的FACL。  </span><br><span class="line">getfacl /tmp 或 getfacl /tmp/test.txt</span><br><span class="line">#后面的是默认权限，没有#的是FACL权限。</span><br><span class="line">user::rwx表示用户的权限为rwx，单独为某一个用户设定权限为r--则他的权限取小的值为r--。</span><br><span class="line">user::和group::定义的同时定义了mask，谁的权限大，mask就取谁的权限。</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../../images/20250117/image-20241231145346569-1737092213955-7-1737094084871-8.png" alt="image-20241231145346569-1737092213955-7-1737094084871-8"><img src="/./../../images/20250117/image-20241231145449933.png" alt="image-20241231145449933"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置文件的facl权限</span><br><span class="line">setfacl -m 身份：名称：权限 文件路径</span><br><span class="line"></span><br><span class="line">为用户test添加/tmp/test.txt的所有权限</span><br><span class="line">setfacl -m u:test:rw /tmp/test.txt</span><br><span class="line">为用户组testg添加/tmp/test.txt的无权限</span><br><span class="line">setfacl -m g:testg:--- /tmp/test.txt</span><br><span class="line">删除用户test关于/tmp/test的执行权限</span><br><span class="line">setfacl -x u:test:x /tmp/test.txt</span><br><span class="line"></span><br><span class="line">如果遇到设置的用户权限与mask权限冲突,则用户的权限为effective权限。</span><br><span class="line">使用setfacl -Rm m::rwx 文件路径 </span><br><span class="line">将文件目录下的所有文件重新修改一次mask，否则可能只针对新增加的文件生效。</span><br></pre></td></tr></table></figure>
-
+    <title>burp使用captcha-killer-modified插件</title>
+    <url>/2024/08/22/20240822-20240822/</url>
+    <content><![CDATA[<h1 id="github下载captcha-killer-modified插件"><a href="#github下载captcha-killer-modified插件" class="headerlink" title="github下载captcha-killer-modified插件"></a>github下载captcha-killer-modified插件</h1><hr>
+<p>git clone <a href="https://github.com/f0ng/captcha-killer-modified">https://github.com/f0ng/captcha-killer-modified</a><br>burp添加安装插件,点击Extensions模块，在Extension details一栏点击Add，选择刚下好的jar包。并点击下一步完成安装。<br><img src="/./images/20240822/11.jpg" alt="11"></p>
+<hr>
+<h1 id="安装ddddocr和aiohttp服务"><a href="#安装ddddocr和aiohttp服务" class="headerlink" title="安装ddddocr和aiohttp服务"></a>安装ddddocr和aiohttp服务</h1><hr>
+<p>pip install -i <a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a> –trusted host mirrors.aliyun.com ddddocr aiohttp<br>安装完成后执行codereg.py，先修改codereg.py，把文件里端口号”8888”的双引号去掉<br><img src="/./images/20240822/10.png" alt="10"><br>    cmd窗口执行python coderg.py 出现以下内容即代表验证码识别服务已搭建完成。<br><img src="/./images/20240822/1.png" alt="1"></p>
+<h1 id="靶场演示"><a href="#靶场演示" class="headerlink" title="靶场演示"></a>靶场演示</h1><hr>
+<p>burp抓报，获取目标验证码接口，鼠标右键发送至intruder和captcha-killer-modified插件<br><img src="/./images/20240822/12.png" alt="12"></p>
+<p>点击获取按钮，获取验证码，在接口url填写127.0.0.1:8888，在request template下右键选择”模板库”，选择dddddocr，可以看到返回了验证码。<br><img src="/./images/20240822/13.jpg" alt="13"><img src="/./images/20240822/4-1725327633950-2.png" alt="4"></p>
+<h1 id="爆破登录页面验证码识别相关配置"><a href="#爆破登录页面验证码识别相关配置" class="headerlink" title="爆破登录页面验证码识别相关配置"></a>爆破登录页面验证码识别相关配置</h1><hr>
+<p>转到intruder模块Attack type选择”Pitchfork”，在username、password和verifyCode处设置变量<br><img src="/./images/20240822/5.png" alt="5">在Payloads栏下的第3个变量选择Extension-generated，点击Select generator选择”captcha-killer-modified”<br><img src="/./images/20240822/3.png" alt="3"></p>
+<p>在Resource Pool栏下设置发送请求间隔，防止验证码获取错误。<br><img src="/./images/20240822/7.png" alt="7"><br>点击Start attack，看效果，查看返回码Length不同的Response为爆破成功。<br><img src="/./images/20240822/9.png" alt="9"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>负载均衡AD常用配置</title>
+    <url>/2024/11/11/20241111-20241111/</url>
+    <content><![CDATA[<h1 id="负载均衡AD常用配置"><a href="#负载均衡AD常用配置" class="headerlink" title="负载均衡AD常用配置"></a>负载均衡AD常用配置</h1><h2 id="部署配置"><a href="#部署配置" class="headerlink" title="部署配置"></a>部署配置</h2><p>AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。<br><img src="/./images/20241111/1731296098201.png" alt="1731296098201"></p>
+<h2 id="配置源NAT"><a href="#配置源NAT" class="headerlink" title="配置源NAT"></a>配置源NAT</h2><p><img src="/./images/20241111/image-20241111113639676.png" alt="image-20241111113639676"></p>
+<h2 id="配置目的nat"><a href="#配置目的nat" class="headerlink" title="配置目的nat"></a>配置目的nat</h2><p>网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT<br><img src="/./images/20241111/image-20241111114339043.png" alt="image-20241111114339043"><br>双向映射配置源NAT<br><img src="/./images/20241111/image-20241111114551419.png" alt="image-20241111114551419"></p>
+<h2 id="链路负载"><a href="#链路负载" class="headerlink" title="链路负载"></a>链路负载</h2><p>链路负载-智能路由，链路策略选择带宽比例或者加权最小流量<br><img src="/./images/20241111/1731296338531.png" alt="1731296338531"></p>
+<h2 id="应用负载"><a href="#应用负载" class="headerlink" title="应用负载"></a>应用负载</h2><p>配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。</p>
+<ol>
+<li><p>添加业务主机</p>
+<p>添加业务主机，填写内网服务器IP，选择ping来检测<img src="/./images/20241111/image-20241111152511246.png" alt="image-20241111152511246"></p>
+</li>
+<li><p>添加节点池<br>应用负载-节点池，添加节点池，填写内网服务器IP和端口。</p>
+<p><img src="/./images/20241111/image-20241111151327175.png" alt="image-20241111151327175"></p>
+</li>
+<li><p>配置虚拟服务</p>
+<p>一般用于灵活配置流量转发、业务高可用、安全防护，如根据业务数据灵活转发流量；<br>如业务流量过大，一台服务器无法承受时对业务进行扩容；如通过健康检查机制保证<br>业务高可用；如隐藏服务器真实IP或网站路径；如防止SYN FLOOD攻击、 HTTP攻击<br>等  </p>
+<p>应用负载-虚拟服务，添加虚拟服务IP地址填公网地址，外部使用https访问，端口填443，节点池选择刚才添加的80端口的节点。</p>
+<p><img src="/./images/20241111/1731309393336.jpg" alt="1731309393336"><br>开启HTTPS自动跳转，访问http域名的时候自动重定向为访问https<br><img src="/./images/20241111/1731309542404.jpg" alt="1731309542404"></p>
+</li>
+<li><p>导入SSL证书，一般为.cer、.crt、.p12、.pfx</p>
+<p><img src="/./images/20241111/image-20241111115723475.png" alt="image-20241111115723475"></p>
+</li>
+<li><p>配置SSL策略</p>
+<p>应用负载-SSL策略-SSL卸载策略，RSA服务器证书选择刚才导入的SSL证书。</p>
+<p><img src="/./images/20241111/image-20241111143742739.png" alt="image-20241111143742739"></p>
+</li>
+</ol>
 ]]></content>
   </entry>
   <entry>
@@ -368,33 +387,39 @@
 ]]></content>
   </entry>
   <entry>
-    <title>负载均衡AD常用配置</title>
-    <url>/2024/11/11/20241111-20241111/</url>
-    <content><![CDATA[<h1 id="负载均衡AD常用配置"><a href="#负载均衡AD常用配置" class="headerlink" title="负载均衡AD常用配置"></a>负载均衡AD常用配置</h1><h2 id="部署配置"><a href="#部署配置" class="headerlink" title="部署配置"></a>部署配置</h2><p>AD路由模式部署，配置接口ip，配置3条默认路由到不同线路，再配置一条到内网的回程路由。<br><img src="/./images/20241111/1731296098201.png" alt="1731296098201"></p>
-<h2 id="配置源NAT"><a href="#配置源NAT" class="headerlink" title="配置源NAT"></a>配置源NAT</h2><p><img src="/./images/20241111/image-20241111113639676.png" alt="image-20241111113639676"></p>
-<h2 id="配置目的nat"><a href="#配置目的nat" class="headerlink" title="配置目的nat"></a>配置目的nat</h2><p>网络部署-地址转换-目的地址转换，配置双向映射需要再源地址指定链路添加所有LAN口，再配置源NAT<br><img src="/./images/20241111/image-20241111114339043.png" alt="image-20241111114339043"><br>双向映射配置源NAT<br><img src="/./images/20241111/image-20241111114551419.png" alt="image-20241111114551419"></p>
-<h2 id="链路负载"><a href="#链路负载" class="headerlink" title="链路负载"></a>链路负载</h2><p>链路负载-智能路由，链路策略选择带宽比例或者加权最小流量<br><img src="/./images/20241111/1731296338531.png" alt="1731296338531"></p>
-<h2 id="应用负载"><a href="#应用负载" class="headerlink" title="应用负载"></a>应用负载</h2><p>配置虚拟服务和SSL卸载-单向（配置双向的话需要安装客户端的证书才能进行SSL握手），客户申请了证书，但是不方便在服务器上配置，需要再AD上进行修改，实现映射内网服务器的80端口，外部通过https访问。</p>
-<ol>
-<li><p>添加业务主机</p>
-<p>添加业务主机，填写内网服务器IP，选择ping来检测<img src="/./images/20241111/image-20241111152511246.png" alt="image-20241111152511246"></p>
-</li>
-<li><p>添加节点池<br>应用负载-节点池，添加节点池，填写内网服务器IP和端口。</p>
-<p><img src="/./images/20241111/image-20241111151327175.png" alt="image-20241111151327175"></p>
-</li>
-<li><p>配置虚拟服务</p>
-<p>一般用于灵活配置流量转发、业务高可用、安全防护，如根据业务数据灵活转发流量；<br>如业务流量过大，一台服务器无法承受时对业务进行扩容；如通过健康检查机制保证<br>业务高可用；如隐藏服务器真实IP或网站路径；如防止SYN FLOOD攻击、 HTTP攻击<br>等  </p>
-<p>应用负载-虚拟服务，添加虚拟服务IP地址填公网地址，外部使用https访问，端口填443，节点池选择刚才添加的80端口的节点。</p>
-<p><img src="/./images/20241111/1731309393336.jpg" alt="1731309393336"><br>开启HTTPS自动跳转，访问http域名的时候自动重定向为访问https<br><img src="/./images/20241111/1731309542404.jpg" alt="1731309542404"></p>
-</li>
-<li><p>导入SSL证书，一般为.cer、.crt、.p12、.pfx</p>
-<p><img src="/./images/20241111/image-20241111115723475.png" alt="image-20241111115723475"></p>
-</li>
-<li><p>配置SSL策略</p>
-<p>应用负载-SSL策略-SSL卸载策略，RSA服务器证书选择刚才导入的SSL证书。</p>
-<p><img src="/./images/20241111/image-20241111143742739.png" alt="image-20241111143742739"></p>
-</li>
-</ol>
+    <title>关于爱情令人不解的一切</title>
+    <url>/2025/02/05/20250205-20250205/</url>
+    <content><![CDATA[<h1 id="关于爱情令人不解的一切"><a href="#关于爱情令人不解的一切" class="headerlink" title="关于爱情令人不解的一切"></a>关于爱情令人不解的一切</h1><h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>​		距离本身并不存在，它很大程度上只是你主观意识的产物，也就是你觉得和一个人距离近就近，和他远就远，一切都取决于你而已。</p>
+<p>​		比如自来熟他主观上认为你是他的朋友，他挽着你的手臂或者熟络地跟你聊很多很多东西，从而他自己创造这么一种气场和氛围，让你觉得好像你们也已经是认识很久的朋友，然后这种气场会真的推进你们成为真正的朋友。</p>
+<p>​		所以人际关系中的距离其实是一个非常简单的东西，你觉得近就近，你觉得远就远，如果你主观意识上把人际关系想的非常复杂，你看到一个人你想认识她，但是你扭扭捏捏不敢接近，你心里活动越多，它本质上就真的变得越来越复杂，但是它客观上可能没有那么复杂。</p>
+<p>​		自来熟是对方不是你的朋友，但是你把对方当朋友来相处，从而你们之间有朋友的那种氛围。调情就是无论对方现在是不是你的情人，你都把他当一个情人来相处，从而你对他的眼神，你跟他说话的方式，你的肢体语言都开始有了一些暧昧的意味。所以其实调情它本质上就是从一个人的主观世界出发把对方当做自己的情人，从而他真的可以创造出这种浪漫的氛围，而推动对方真正地成为自己的情人。</p>
+<h2 id="告白"><a href="#告白" class="headerlink" title="告白"></a>告白</h2><p>​		如果我对一个人产生了很大的兴趣，我不会在我跟他吃饭的时候，突然一本正经的问他”我现在可以和你调情吗“，直接上就是了。同理你如果想和一个人成为男女朋友，其实你没有必要在最开始问“我可以成为你的男女朋友吗”，你直接追求和他男女朋友的那种状态就可以了，你直接和他一起做一些男女朋友可能会做的一些活动，比如说你们单独吃饭，比如说你们去电影院，然后如果他同意出来了，他客观上是不是你男女朋友又有什么呢。</p>
+<p>​		但是在你们没有达到那种很暧昧的状态，你就跟对方表白，对方会有一种被成交的感觉（对方有求于我，然后我必须给出一个答案，或者给出一个承诺），比如在服装店和售楼部里一样，会从感性马上回归理性，然后开始做计算。</p>
+<p>​		状态大于拥有，你首先去追求和他像男女朋友一样的状态，然后逐渐再过渡到拥有的这个标志点。但不要在关系正式确立前，付出太多实质性的东西。（否则对方缺乏给更多承诺的理由）实际上从哲学的意义上来说，我们的一生都无法真正拥有任何东西，你连你自己的生命都抓不住，你必定要经过生老病死的这个过程，你怎么还奢求去抓住爱情这么变幻不定，这么虚无缥缈的东西呢。</p>
+<p>​		你连你自己都改变不了，你每天发多少誓，要开始减肥，要开始锻炼，要早睡早起，请问你成功改变自己了吗，你连自己都改变不了，为什么要奢求去改变另外一个人，把她变成你喜欢的样子呢，所以我们不用去尝试抓住任何，注定要离我们而去的东西，也不用去改变对方，我们就给别人自由，让自己成长。</p>
+<h2 id="吸引"><a href="#吸引" class="headerlink" title="吸引"></a>吸引</h2><p>​		前面讲了距离很大程度上只是你主观意识的产物，而我们要去追求一种主观意识可以所影响的“状态”，再从这种“状态”过渡到“拥有”，而不是一上去就追求拥有。</p>
+<p>​		这个世界上并不存在被一个人吸引这件事情，我们从来都不是被一个人吸引，而是被这个人的“世界”所吸引。有几种男生是不缺女朋友的，第一种是在一个领域内做到非常擅长和顶尖的男生。第二种就是会才艺的男生，艺术的魅力。第三种就是经常处于焦点的男生，他们的受众面很广，而这个受众里面肯定有被他们所吸引的人。这就是焦点效应，目光聚集之处必定有魔力发生。</p>
+<p>​		但无论是顶尖、才艺还是焦点，本质上吸引他人的都是我们的世界。人在什么状态下最有魅力，人一定是在专注的状态下最有魅力，因为在专注的状态下，你跟你从事的这个东西合二为一，从而形成一种非常强大的磁场，形成一种神奇的吸引力。正因为吸引他人的其实是我们的世界，所以当我们爱上一个人，并且因为这个人而逐渐失去我们的世界，当对方完全成为你的世界，而你丧失了自我，这个时候你对对方的吸引力就为0，一个丧失了自我，丧失了自己的世界的人，是对他人构成不了吸引力的，永远不要把一个人当成你的世界，不要把一个人的自由意志，当成你的最高信条。被吸引的人会自动被我们所吸引，而不被我们所吸引的人，是因为他们没有在我们的世界中看到他们所需要的东西，所以一个人对你冷淡，或者不回应，或者不冷不热，本质上这个信号就是，他不需要你。</p>
+<p>​		而这也并不代表你有什么问题，因为萝卜白菜各有所爱，如果一个人在你身上看到了他所需要的东西，那么你踢他都是踢不走的，我们每个人本身就是一团需求，然后可能有些人会满足我们的需求，而在有些人那里，他们提供不了我们所想要的，这都是非常正常的事情，你也不需要去纠缠他们，我们要做的只是“展示”而已，当我们展示完了之后，对方依然没有被我们吸引，那我们就随缘就行了。</p>
+<h2 id="激情"><a href="#激情" class="headerlink" title="激情"></a>激情</h2><p>​		恋爱初期的激情，本质上就是由三个字驱动，叫做“好奇心”，你看到一个人，她这么光鲜，这么漂亮，她的世界是那么的有趣，你好想去探个究竟，这种探个究竟的想法，就是你被这个人吸引的感觉。但是探个究竟之后还剩下什么，这个就是问题，所以爱情的保鲜，归根到底就是三个字，神秘感。</p>
+<p>​		用神秘感去调动对面的好奇心，对方就是冲着这种未知性，就是你身上还有他没有明白，他想搞清楚的地方，他才会一直不断地想接近你，一个人对你的想像空间，就是他对你的想念空间。所以即使你跟一个人在一起了，也要学会四个字，叫“点到为止”。过度享乐的后果就是很快没感觉，为了防止过度享乐，最好的方法就是你有你自己的世界，无论这是你的事业还是你的社交圈，如果你们已经知根知底了怎么办，你可以保持你的世界不断变化，不断的变化，就是不断的神秘感和未知感的来源。</p>
+<p>​		除了点到为止，不断变化，关于神秘感还有一点，就是你的内在要大于外在，“国之利器不能示于人”。所以我们一定要构建自己的世界，并且这种世界它是随时间而增值的。</p>
+<h2 id="平淡"><a href="#平淡" class="headerlink" title="平淡"></a>平淡</h2><p>​		所有激情的本质都是一种“中毒”，你在中毒的时候会觉得对方是你的唯一，是你的永恒，但是等毒性退散之后你恢复正常了，你会发现对方不一定是适合长期生活或者过日子的人。所以当我们在考虑结婚对象的时候，所谓的来电或者激情，它其实不应该成为一种主要的考虑因素，因为无论激情再怎么强烈，它都是一种会随时间退散的东西，那你在考虑结婚对象的时候应该考虑的是舒服。</p>
+<p>​		舒服的意思就是，你跟这个人相处不累，如果你觉得一个人很有魅力，但是你跟他在一起就是会特别累。因为我们平时为生活奔波已经很辛苦了，不希望在家里再找一个祖宗伺候对吧，其实人和人的相处和交流本身，就是很累的，因为我们大家都有不一样的价值观，你如果觉得和一个人相处起来特别舒服，那基本上肯定是对方在某种程度上让步或者妥协，或者说你们双方都在让步和妥协，才会有一段非常愉快的交流。因为自然状态下，人和人放在一起是势必会起冲突的。</p>
+<p>​		所以大家首先接受人和人的交流，相处本来就是很累的，但是在这个基础上，你选择长期生活的结婚伴侣，要挑选一个相处起来不那么累的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​		一切吸引的本质，都并不是被一个人所吸引，而是被一个人的世界所吸引，我们永远要有自己的世界，不要把另外一个人当成我们全部的世界，不要把另外一个人的自由意志，当成我们的最高信条，爱情由神秘感驱动，神秘感背后是好奇心，好奇心并不是一种很高级的东西，你对很多人都可以有好奇心，但是关怀和呵护是一种很高级并且很了不起的东西，长期的相处要看舒服而不是激情，激情必然退散，而舒服可以决定你和一个人是否融洽的走得更长久，你和一个人的激情必将退散，也可能会不断对新的人产生新的激情，但是如果这种新的激情是你愿意放下一切去追求的，那么你这辈子可能每两年都要离一次婚，有些想法本身并没有错，但是对他人的伤害一定会伴随相应的代价，任何人的成功都离不开其他人的养分输送，所以学会及时安顿好对方的情，并且不要丧失对任何人的敬畏之心，谨记这些你会离幸福更近。</p>
+<p><a href="https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64%E3%80%90%E4%BA%BA%E9%99%85%E5%89%96%E6%9E%904%E3%80%91%E5%85%B3%E4%BA%8E%E7%88%B1%E6%83%85%E4%BB%A4%E4%BA%BA%E4%B8%8D%E8%A7%A3%E7%9A%84%E4%B8%80%E5%88%87">https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64【人际剖析4】关于爱情令人不解的一切</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>文件ACL</title>
+    <url>/2025/01/17/20250117-20250117/</url>
+    <content><![CDATA[<h1 id="文件访问控制列表（FACL）"><a href="#文件访问控制列表（FACL）" class="headerlink" title="文件访问控制列表（FACL）"></a>文件访问控制列表（FACL）</h1><p>FACL全称File Access Control Lists，可对某个指定的用户或组进行对某文件的单独的权限控制。如果针对某个目录设置了ACL，则目录中的文件会继承其权限；若针对文件设置了ACL，则文件不再继承其所在目录的权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FACL 设置命令与常用参数详解</span><br><span class="line">用法: setfacl [-bkndRLP] &#123; -m|-M|-x|-X ... &#125; file ...</span><br><span class="line">m: 修改权限</span><br><span class="line">x: 删除某个权限</span><br><span class="line">b: 删除所有权限</span><br><span class="line">R: 递归子目录</span><br><span class="line">查看文件ACL</span><br><span class="line">getfacl 文件路径</span><br><span class="line">ls -l 用命令也可查看文件是否有FACL，不过只能是否有（看权限信息的结尾是否有+号），不能知道有什么</span><br><span class="line">ls -l 下查看的rwx是mask权限而不是平常的文件permission。</span><br><span class="line"></span><br><span class="line">查看/tmp文件下的FACL或查看/tmp/test.txt单独的FACL。  </span><br><span class="line">getfacl /tmp 或 getfacl /tmp/test.txt</span><br><span class="line">#后面的是默认权限，没有#的是FACL权限。</span><br><span class="line">user::rwx表示用户的权限为rwx，单独为某一个用户设定权限为r--则他的权限取小的值为r--。</span><br><span class="line">user::和group::定义的同时定义了mask，谁的权限大，mask就取谁的权限。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../../images/20250117/image-20241231145346569-1737092213955-7-1737094084871-8.png" alt="image-20241231145346569-1737092213955-7-1737094084871-8"><img src="/./../../images/20250117/image-20241231145449933.png" alt="image-20241231145449933"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置文件的facl权限</span><br><span class="line">setfacl -m 身份：名称：权限 文件路径</span><br><span class="line"></span><br><span class="line">为用户test添加/tmp/test.txt的所有权限</span><br><span class="line">setfacl -m u:test:rw /tmp/test.txt</span><br><span class="line">为用户组testg添加/tmp/test.txt的无权限</span><br><span class="line">setfacl -m g:testg:--- /tmp/test.txt</span><br><span class="line">删除用户test关于/tmp/test的执行权限</span><br><span class="line">setfacl -x u:test:x /tmp/test.txt</span><br><span class="line"></span><br><span class="line">如果遇到设置的用户权限与mask权限冲突,则用户的权限为effective权限。</span><br><span class="line">使用setfacl -Rm m::rwx 文件路径 </span><br><span class="line">将文件目录下的所有文件重新修改一次mask，否则可能只针对新增加的文件生效。</span><br></pre></td></tr></table></figure>
+
 ]]></content>
   </entry>
   <entry>
@@ -436,28 +461,37 @@
 ]]></content>
   </entry>
   <entry>
-    <title>关于爱情令人不解的一切</title>
-    <url>/2025/02/05/20250205-20250205/</url>
-    <content><![CDATA[<h1 id="关于爱情令人不解的一切"><a href="#关于爱情令人不解的一切" class="headerlink" title="关于爱情令人不解的一切"></a>关于爱情令人不解的一切</h1><h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>​		距离本身并不存在，它很大程度上只是你主观意识的产物，也就是你觉得和一个人距离近就近，和他远就远，一切都取决于你而已。</p>
-<p>​		比如自来熟他主观上认为你是他的朋友，他挽着你的手臂或者熟络地跟你聊很多很多东西，从而他自己创造这么一种气场和氛围，让你觉得好像你们也已经是认识很久的朋友，然后这种气场会真的推进你们成为真正的朋友。</p>
-<p>​		所以人际关系中的距离其实是一个非常简单的东西，你觉得近就近，你觉得远就远，如果你主观意识上把人际关系想的非常复杂，你看到一个人你想认识她，但是你扭扭捏捏不敢接近，你心里活动越多，它本质上就真的变得越来越复杂，但是它客观上可能没有那么复杂。</p>
-<p>​		自来熟是对方不是你的朋友，但是你把对方当朋友来相处，从而你们之间有朋友的那种氛围。调情就是无论对方现在是不是你的情人，你都把他当一个情人来相处，从而你对他的眼神，你跟他说话的方式，你的肢体语言都开始有了一些暧昧的意味。所以其实调情它本质上就是从一个人的主观世界出发把对方当做自己的情人，从而他真的可以创造出这种浪漫的氛围，而推动对方真正地成为自己的情人。</p>
-<h2 id="告白"><a href="#告白" class="headerlink" title="告白"></a>告白</h2><p>​		如果我对一个人产生了很大的兴趣，我不会在我跟他吃饭的时候，突然一本正经的问他”我现在可以和你调情吗“，直接上就是了。同理你如果想和一个人成为男女朋友，其实你没有必要在最开始问“我可以成为你的男女朋友吗”，你直接追求和他男女朋友的那种状态就可以了，你直接和他一起做一些男女朋友可能会做的一些活动，比如说你们单独吃饭，比如说你们去电影院，然后如果他同意出来了，他客观上是不是你男女朋友又有什么呢。</p>
-<p>​		但是在你们没有达到那种很暧昧的状态，你就跟对方表白，对方会有一种被成交的感觉（对方有求于我，然后我必须给出一个答案，或者给出一个承诺），比如在服装店和售楼部里一样，会从感性马上回归理性，然后开始做计算。</p>
-<p>​		状态大于拥有，你首先去追求和他像男女朋友一样的状态，然后逐渐再过渡到拥有的这个标志点。但不要在关系正式确立前，付出太多实质性的东西。（否则对方缺乏给更多承诺的理由）实际上从哲学的意义上来说，我们的一生都无法真正拥有任何东西，你连你自己的生命都抓不住，你必定要经过生老病死的这个过程，你怎么还奢求去抓住爱情这么变幻不定，这么虚无缥缈的东西呢。</p>
-<p>​		你连你自己都改变不了，你每天发多少誓，要开始减肥，要开始锻炼，要早睡早起，请问你成功改变自己了吗，你连自己都改变不了，为什么要奢求去改变另外一个人，把她变成你喜欢的样子呢，所以我们不用去尝试抓住任何，注定要离我们而去的东西，也不用去改变对方，我们就给别人自由，让自己成长。</p>
-<h2 id="吸引"><a href="#吸引" class="headerlink" title="吸引"></a>吸引</h2><p>​		前面讲了距离很大程度上只是你主观意识的产物，而我们要去追求一种主观意识可以所影响的“状态”，再从这种“状态”过渡到“拥有”，而不是一上去就追求拥有。</p>
-<p>​		这个世界上并不存在被一个人吸引这件事情，我们从来都不是被一个人吸引，而是被这个人的“世界”所吸引。有几种男生是不缺女朋友的，第一种是在一个领域内做到非常擅长和顶尖的男生。第二种就是会才艺的男生，艺术的魅力。第三种就是经常处于焦点的男生，他们的受众面很广，而这个受众里面肯定有被他们所吸引的人。这就是焦点效应，目光聚集之处必定有魔力发生。</p>
-<p>​		但无论是顶尖、才艺还是焦点，本质上吸引他人的都是我们的世界。人在什么状态下最有魅力，人一定是在专注的状态下最有魅力，因为在专注的状态下，你跟你从事的这个东西合二为一，从而形成一种非常强大的磁场，形成一种神奇的吸引力。正因为吸引他人的其实是我们的世界，所以当我们爱上一个人，并且因为这个人而逐渐失去我们的世界，当对方完全成为你的世界，而你丧失了自我，这个时候你对对方的吸引力就为0，一个丧失了自我，丧失了自己的世界的人，是对他人构成不了吸引力的，永远不要把一个人当成你的世界，不要把一个人的自由意志，当成你的最高信条。被吸引的人会自动被我们所吸引，而不被我们所吸引的人，是因为他们没有在我们的世界中看到他们所需要的东西，所以一个人对你冷淡，或者不回应，或者不冷不热，本质上这个信号就是，他不需要你。</p>
-<p>​		而这也并不代表你有什么问题，因为萝卜白菜各有所爱，如果一个人在你身上看到了他所需要的东西，那么你踢他都是踢不走的，我们每个人本身就是一团需求，然后可能有些人会满足我们的需求，而在有些人那里，他们提供不了我们所想要的，这都是非常正常的事情，你也不需要去纠缠他们，我们要做的只是“展示”而已，当我们展示完了之后，对方依然没有被我们吸引，那我们就随缘就行了。</p>
-<h2 id="激情"><a href="#激情" class="headerlink" title="激情"></a>激情</h2><p>​		恋爱初期的激情，本质上就是由三个字驱动，叫做“好奇心”，你看到一个人，她这么光鲜，这么漂亮，她的世界是那么的有趣，你好想去探个究竟，这种探个究竟的想法，就是你被这个人吸引的感觉。但是探个究竟之后还剩下什么，这个就是问题，所以爱情的保鲜，归根到底就是三个字，神秘感。</p>
-<p>​		用神秘感去调动对面的好奇心，对方就是冲着这种未知性，就是你身上还有他没有明白，他想搞清楚的地方，他才会一直不断地想接近你，一个人对你的想像空间，就是他对你的想念空间。所以即使你跟一个人在一起了，也要学会四个字，叫“点到为止”。过度享乐的后果就是很快没感觉，为了防止过度享乐，最好的方法就是你有你自己的世界，无论这是你的事业还是你的社交圈，如果你们已经知根知底了怎么办，你可以保持你的世界不断变化，不断的变化，就是不断的神秘感和未知感的来源。</p>
-<p>​		除了点到为止，不断变化，关于神秘感还有一点，就是你的内在要大于外在，“国之利器不能示于人”。所以我们一定要构建自己的世界，并且这种世界它是随时间而增值的。</p>
-<h2 id="平淡"><a href="#平淡" class="headerlink" title="平淡"></a>平淡</h2><p>​		所有激情的本质都是一种“中毒”，你在中毒的时候会觉得对方是你的唯一，是你的永恒，但是等毒性退散之后你恢复正常了，你会发现对方不一定是适合长期生活或者过日子的人。所以当我们在考虑结婚对象的时候，所谓的来电或者激情，它其实不应该成为一种主要的考虑因素，因为无论激情再怎么强烈，它都是一种会随时间退散的东西，那你在考虑结婚对象的时候应该考虑的是舒服。</p>
-<p>​		舒服的意思就是，你跟这个人相处不累，如果你觉得一个人很有魅力，但是你跟他在一起就是会特别累。因为我们平时为生活奔波已经很辛苦了，不希望在家里再找一个祖宗伺候对吧，其实人和人的相处和交流本身，就是很累的，因为我们大家都有不一样的价值观，你如果觉得和一个人相处起来特别舒服，那基本上肯定是对方在某种程度上让步或者妥协，或者说你们双方都在让步和妥协，才会有一段非常愉快的交流。因为自然状态下，人和人放在一起是势必会起冲突的。</p>
-<p>​		所以大家首先接受人和人的交流，相处本来就是很累的，但是在这个基础上，你选择长期生活的结婚伴侣，要挑选一个相处起来不那么累的。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​		一切吸引的本质，都并不是被一个人所吸引，而是被一个人的世界所吸引，我们永远要有自己的世界，不要把另外一个人当成我们全部的世界，不要把另外一个人的自由意志，当成我们的最高信条，爱情由神秘感驱动，神秘感背后是好奇心，好奇心并不是一种很高级的东西，你对很多人都可以有好奇心，但是关怀和呵护是一种很高级并且很了不起的东西，长期的相处要看舒服而不是激情，激情必然退散，而舒服可以决定你和一个人是否融洽的走得更长久，你和一个人的激情必将退散，也可能会不断对新的人产生新的激情，但是如果这种新的激情是你愿意放下一切去追求的，那么你这辈子可能每两年都要离一次婚，有些想法本身并没有错，但是对他人的伤害一定会伴随相应的代价，任何人的成功都离不开其他人的养分输送，所以学会及时安顿好对方的情，并且不要丧失对任何人的敬畏之心，谨记这些你会离幸福更近。</p>
-<p><a href="https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64%E3%80%90%E4%BA%BA%E9%99%85%E5%89%96%E6%9E%904%E3%80%91%E5%85%B3%E4%BA%8E%E7%88%B1%E6%83%85%E4%BB%A4%E4%BA%BA%E4%B8%8D%E8%A7%A3%E7%9A%84%E4%B8%80%E5%88%87">https://www.bilibili.com/video/BV1fD4y1s7WJ/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=f5cd1b1f049d8ad43f7928aaf17bbc64【人际剖析4】关于爱情令人不解的一切</a></p>
+    <title>堡垒机常用操作</title>
+    <url>/2024/09/04/20240904-1-20240904-1/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="74871f8a47b33d5ecc38e3f1f0ebd7c72eb66acee930e42461b5c3972720f615">3ade0eb6bedd7c5d1d1e30a72ac79bdf124974e57a9945b2aeae696f7a9a131681f7ee27ca76e99e0224e901ccf41e6a723347d186946904b42cdfb2a0ffab6d29eec452eeb9658abfb0b195c95014470cdbfbb4b403c5a008c3aba8aae259827e13d194cfafa5c58c1c7ab2c584773df1c6c91079c14d4413ef753239270eb5879fe9fea13375ceeb6f74ad9f1490f84ba917e3ab8db7ac92a8e035600e6a4bf1344299fd9cd80d7fd34246050a4f4009781bd8ab4675f0bc931e60f707644759fd16b7da222767fd4894d963b5d4c95d8fcb04570a2d9093da0d7cb3fc92088288bac70b6ce1a8a64b770ac37ba14005370bbf21c584a60f0e34b888aeb9652cee94504128c93c78df6966597889a868af2b101af40877d72002c1144412c7e9f270630357531c42954be934af79b16949dc82965282c00a3647abe4c51cebf624087b8203b0a5c8ac3b13e2d0fdd01c433c89f9d203aa311cc613244279d50d4752bd5235aecb0db6e5cbc7ddc2c40bc59318dce320193a2666b3795dd08d8443dcb7ecb3a28ae568ae094ccc1f1858e41a701dcc83df04111fa00527ed42709979bbd5c0b611f8c0b8008c0fb8b9d5e9456d6f3a3a87c86b9170518787620b1c9469b0596825ba71aedbab9a35b7ca55c7ba53e9f113e2d0c3177e7edb84b104f162bbe681ac980122c6fe25aca3c6dd86258142ca90c4ca184d6b43f46aba81f8553498bf58a90aedff262f6db4a98fef52d6a107f6d6ad6f0ab5716b2f3edad486e404512ce07a5f7a8d830e47f283d87c5c9edc926fdd8e724afe1d8a57a672479b3aea0a547511ca4513262a0813bfe527b8f17c574e5654cf4fb70721af081e8b5af5b6f722f69edeca8289a2ecb69e7dae917c006cc5aa87e1601c3cd61bea52afe42a802ecc07817d537415a917db74a3f20c371ab8d0e5e4e3132bd2d9608d06c0c08d8877d324d68f4c3a4f672fd64039f4ccb25c0f33ca2014218176a776e80a775a0608d190c799a7d215b599f8fdd8b18a23c3fc3a82c0cb028579e7b34226c6601527efa3544f2e455fedabd302c2dfd383f78cfb9e7a596f8c3a2076aa4deaefe1f5cbbcfd7247747af387fad274a4df7a42aafeb4c023ce2d84b872a5c8dba72f31fea9b3e81b5686a92fe758171c180756336a23a44926b463007fb20c2c8b8aaff0d726d51c9ef9f9d32dff52083f7dcf2d24902920115ad2b639f67e4cb8873d66dca42757334579251bbf6616355e5562a6c159a31edd8cac966c4f24caa5dde2b4b0154f14b530db3354c03a829652c65235932074578a4a8a2f6cabcb892e3e6a297e382317063f90c86a615ae1460fed91c3fc6d76a4001fc63cfa17643ee2d7e2ae7bd6844a0fa9201e98bb7ea05068034a841921a49a0b56054e6871393068fea7b95d40a31c186c9ecedbe07b5cfe72f44a643784af8b3ba8934accaf122b4ea333002535893ae8dcd3be242261a0247c176a5b0ce9b932fbb00339190646aae8ea9aaa74b65b4628272107ce08bcbf00fd1a54d1b33af5bb05841765eae748c44b06d2aef1179ffc30875a55ba198856bc84cf9ee2fc70ee9bd235cc625bd9465522b6f38e061b4d5c08930b9e387a1e0977bb673cbb240eaa6c7b0beff50ff0b157a94f86e6f1e079386bbf5707f6dd6253b5688a07052553bfb31c6f5e892283d2f37cea9585160b0ddfaace590c99ec60ff5046b1b4ec5a10124e799c40b16722342d0ca70c08e700155604a43ce5e8e25896497a0cda621b4b6191deeafb0c732ad5809a6ae95e375339e6b4165cdcce81726643cb0aae6aafa1d850a9a3c634d85ba66a2a1d5cfb7460e78ec5c79fc3b50f0dce3c40864c10e6dc8872f541fe066584d05c81ae2192fb367264c340d50682c314584fa86f8ec9f64bd6c530c4ae4b138fa141ca9842a79459dfe9885a8eae0b713160537efbaeaf644b73675e63d38648ad0fb3dee4469eb971b9c123267de83b3663b6e538e20ba61449c7fafca22b7f632159e1d3905fa896bce7701d23fb538ab3f3ff8b0dd1c494a1cbb4db76232d3b0a30a7e757dc13121667ea74fceb2c1295b5a45da9fe9924a61ee83bbde8c6e8dab9dc97e16c80f61b0716ea8de9e3f74473ade2e8ceaf1d5cced2f27a040204ae84a3218cf94e5fea72a12ca26f2c1240914b4e6ac64125b73d08ff9aece8f609a2aae6e7b8a91664c0f9fb93959787c9c8bd0fc9e408fd4f8459b101befe5da0398287a84f5c0a11c1ab7509254586a30805e20d4c565f9e54a7dcda8643a0df3e399e836e565a69db19f654a199246e44ea993ab4a03505827ab5e3215138448ef4b54815c3872b3f67ef3a68e99f7e663c9ed2d53fa23c8b45360a94a8f682cff127d86b57c97e0aceda648d4fd3de84f3332ded0bb2bd8f3161c6cc58b83bc6e2239e7d48642a8886fb155cf199c50ca9cd7db3aa44ac2444e01cd0a64d2f4b111f7d79f0ef22c438d1873d443ce9c88dbd4c6d372608bbc3a1e9dea81e59103fc3d6c694e09267b03296e1b740ab98f0b374538a8bbc1d6929a5bd433515f770838022fd3c264c7a4a13e5ae0db83a44a2996b5c2ef278e1c7f60f8460151a49bde7f0d99dcf020eb14a1292d83ebe7075b0b6fede0e6cf30480a5038772e7048120bf9caa642a6b393ca3ae1592dae5780d7cefd007ccf67ce67407818be6ff83c05ba5c21cb26c5a64a732a127b71244b472079d710b693b8a055278d14476028114523dd0de99a8e1b8e2e65ce45e6820e74a51b4ffa8a778782a36a7e3f0a700c821825466418156158638b71445d843653e3c719c4e25c39e055f48494c81523a33fa93f5f99e20b3b21030b64cbfdf2026bde856f50c7fe0f4cb9994eaab90343f84d584f542e34bb19a8a43c61375c7f7634b616edfadb1a2f9a13767c2a97814b70390c39ec50f599a2bcff2560404ddf09fa53c04f55234c6d43ace9f8b929fd7ce9de0b2e9a268a2b8f0d567675e3d9647b6a3c8231cfb1a04839eacbc2b4208c9bb5c8c70213778a9983d69f37cbc5ee0563450ff36bdc9f1297c9cab6d27d7ca8b53487d6ed3c53bf94d690c84780a5be5b719fc0b9188f986978e07c9c32f4d5c5ea291895d42b3b52b1bcae06d2a6bc17e6d0260e6ac35400ebbeb2e0a6550433b1b5b3f30dbe0b1ae073826d1b1b8f30ee565594fd92fac4ee1439dc5d610f507862a37891c8c5d90ea9aa9cbd13caeb6303ebf4d7ede410ac36926669e0660fbbedf68cbd45f12529a7bd9a84686949526300c24ef3e0248c63568036a1589d1de3def527fe2d84af464795991bb606854ef38b7b42fea4622614a01a528926145fd7aa58b58b1eaa185bc1d0cc00a92a729098a9823f10fb0c55758d4df7613fe01c2a8ff434845729f80a2d78139ce1201f0679cc3522e6c1a1814873f6004832ff35f2e7c72af7910a28544578c048af9efc7d45d36f428475c1e357f3f25dd72628aed7ae25b4fefe468eefe30a39b6a1b873411252c41578da1c89cc65e15fa4d1ae11f4af64b26ecf79846547e56aac81dccc6e45fdff4996be06d11e6bb3852b16343453ac4598149e83cce55ae5a4084ff8575fba89062d6fb0aa9741847b583bf1c44409b7eacc6718af598f76a6cddd82f7a7b8c06d5e89d8b12bdc382135f4480a0622b32fc1dda8e96be43f9ffff4de4ec3e7f51245905ab4c3dccc0f6bdbf06db765d40abe9b616a23951539db90121dc76088f4b766ea8ce7f2039adf7df981343ef6b7d016635bb565fb054d2178fcfa6c00ca769a805abfad620ac2b99f771fd006182ffc1be443ad483099aaf3b683e6b461ec0ea7baafee30337eb7ac659a7a8b1bd5f7a3dc31305a813e91cb75220a8f24fb8a55afc9f3245e860f9af2d795f137fac0421fc9af48dff607c2c4a76c9dbe2a5adb7bb2fff2eff5d0ee27f39c90189e8449c839c1f61f1b8337f2d77c30e302c33e3bf27a783f822f32c97489e5ebb43c2e68d1f51dcf13ee4529ed512496d4cd79d8693cf0acf49aff5108a2ec76b7ba64c4302ac04e0c3d61dd1133372f469b62584e782b6c66c2ffc567d0f0efc9ea14a97be46c6a474cf9b0eaee028b7e363b8ed69bee15f816984d807cb55ac56268c7b561351516ef42f2095c9e96530ca91025ad225c977de619b0d9ee779d0b66ed1a34ff2cdf72fc4758f6cedc45a75cc56076f620329d18c266bfbab2d9e7f219dabfb9c53ac20aef4dd981b853e0ac652a7e24b97052a8bf3b323fa764fadb6e7c27a6fe98d62ec2c706f5af372bb8e9b86d3cd54235854bfb32c754398c4b594667b44a22e5c96933cbdd59d8929d4333b557d5fc50b0aa2824da5b47f9df7c66d8f377aeb16aee78a7ca7fc47b82d78ce31f8f5483b069307345bc969bec08e497344e558fa97ce910920ac75e22ae68db96307bf6bc1decd9361974cf01f15a631d41b450c4f0e99b66516ecc2140eddce9953a994da392b5b9327aea3a5154c39ac3240b005a901704fc3b40a851fee054c19757e4f2fc6ca4adf8c99e59ee34ad563a5cb72d869ae8db9220e06ec00a90d47dda81f3825086df7a98691793d04376fa4d527cf52faea6d56884dbfb9a74492f50a3edb0b320644a7bb3d74</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>encryptAsDiary</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RedHat 8.7设置本地yum源</title>
+    <url>/2024/09/02/20240902-2-20240902/</url>
+    <content><![CDATA[<h1 id="RedHat-8-7最小功能安装，很多命令无法使用"><a href="#RedHat-8-7最小功能安装，很多命令无法使用" class="headerlink" title="RedHat 8.7最小功能安装，很多命令无法使用"></a>RedHat 8.7最小功能安装，很多命令无法使用</h1><hr>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">mkdir cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom --挂载镜像文件到cdrom</span><br><span class="line">echo &quot;/dev/cdrom /mnt/cdrom iso9660 defaults,nofail 0 0&quot; --可以设置开机自动挂载</span><br><span class="line">rm -rf /etc/yum.repos.d/* --删除原来的源地址文件也可以备份一份出来放到其他文件夹</span><br><span class="line">touch /etc/yum.repos.d/local.repo --新建repo文件</span><br><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum list</span><br></pre></td></tr></table></figure>
+
+<p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
+<h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
+<p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
 ]]></content>
   </entry>
   <entry>
@@ -487,39 +521,5 @@
 <p><img src="/./images/20240902/9.jpg" alt="9"></p>
 <p>那么安装之后就可以进行抓取 APP 数据包了<br><img src="/./images/20240902/image-20240903102245838.png" alt="image-20240903102245838"></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>RedHat 8.7设置本地yum源</title>
-    <url>/2024/09/02/20240902-2-20240902/</url>
-    <content><![CDATA[<h1 id="RedHat-8-7最小功能安装，很多命令无法使用"><a href="#RedHat-8-7最小功能安装，很多命令无法使用" class="headerlink" title="RedHat 8.7最小功能安装，很多命令无法使用"></a>RedHat 8.7最小功能安装，很多命令无法使用</h1><hr>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">mkdir cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom --挂载镜像文件到cdrom</span><br><span class="line">echo &quot;/dev/cdrom /mnt/cdrom iso9660 defaults,nofail 0 0&quot; --可以设置开机自动挂载</span><br><span class="line">rm -rf /etc/yum.repos.d/* --删除原来的源地址文件也可以备份一份出来放到其他文件夹</span><br><span class="line">touch /etc/yum.repos.d/local.repo --新建repo文件</span><br><span class="line">vi /etc/yum.repos.d/local.repo</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[local]</span><br><span class="line">name=local</span><br><span class="line">baseurl=file:///mnt/cdrom/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">[AppStream]</span><br><span class="line">name=AppStream</span><br><span class="line">baseurl=file:///mnt/cdrom/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum list</span><br></pre></td></tr></table></figure>
-
-<p>在RHEL8中把软件源分成了两部分一个是BaseOS,一个是AppStream，<br>所以相对于RHEL7要多配置一个软件源，否则安装软件会报错。</p>
-<h1 id="在网站上下载软件包然后上传到服务器手动安装"><a href="#在网站上下载软件包然后上传到服务器手动安装" class="headerlink" title="在网站上下载软件包然后上传到服务器手动安装"></a>在网站上下载软件包然后上传到服务器手动安装</h1><hr>
-<p>也可以在网站上下载软件包然后上传到服务器手动安装<br><a href="https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&submit=Search+...&system=&arch=">https://rpmfind.net/linux/rpm2html/search.php?query=glibc-langpack-zh&amp;submit=Search+...&amp;system=&amp;arch=</a><br><a href="https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&serviceType=mirror">https://developer.aliyun.com/mirror/?spm=a2c6h.13651102.0.0.29531b11ryI3IN&amp;serviceType=mirror</a><br>下载对应的软件包然后上传到服务器 运行rpm -ivh xxx.rpm（软件包名字）</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>堡垒机常用操作</title>
-    <url>/2024/09/04/20240904-1-20240904-1/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="74871f8a47b33d5ecc38e3f1f0ebd7c72eb66acee930e42461b5c3972720f615">3ade0eb6bedd7c5d1d1e30a72ac79bdf124974e57a9945b2aeae696f7a9a131681f7ee27ca76e99e0224e901ccf41e6a723347d186946904b42cdfb2a0ffab6d29eec452eeb9658abfb0b195c95014470cdbfbb4b403c5a008c3aba8aae259827e13d194cfafa5c58c1c7ab2c584773df1c6c91079c14d4413ef753239270eb5879fe9fea13375ceeb6f74ad9f1490f84ba917e3ab8db7ac92a8e035600e6a4bf1344299fd9cd80d7fd34246050a4f4009781bd8ab4675f0bc931e60f707644759fd16b7da222767fd4894d963b5d4c95d8fcb04570a2d9093da0d7cb3fc92088288bac70b6ce1a8a64b770ac37ba14005370bbf21c584a60f0e34b888aeb9652cee94504128c93c78df6966597889a868af2b101af40877d72002c1144412c7e9f270630357531c42954be934af79b16949dc82965282c00a3647abe4c51cebf624087b8203b0a5c8ac3b13e2d0fdd01c433c89f9d203aa311cc613244279d50d4752bd5235aecb0db6e5cbc7ddc2c40bc59318dce320193a2666b3795dd08d8443dcb7ecb3a28ae568ae094ccc1f1858e41a701dcc83df04111fa00527ed42709979bbd5c0b611f8c0b8008c0fb8b9d5e9456d6f3a3a87c86b9170518787620b1c9469b0596825ba71aedbab9a35b7ca55c7ba53e9f113e2d0c3177e7edb84b104f162bbe681ac980122c6fe25aca3c6dd86258142ca90c4ca184d6b43f46aba81f8553498bf58a90aedff262f6db4a98fef52d6a107f6d6ad6f0ab5716b2f3edad486e404512ce07a5f7a8d830e47f283d87c5c9edc926fdd8e724afe1d8a57a672479b3aea0a547511ca4513262a0813bfe527b8f17c574e5654cf4fb70721af081e8b5af5b6f722f69edeca8289a2ecb69e7dae917c006cc5aa87e1601c3cd61bea52afe42a802ecc07817d537415a917db74a3f20c371ab8d0e5e4e3132bd2d9608d06c0c08d8877d324d68f4c3a4f672fd64039f4ccb25c0f33ca2014218176a776e80a775a0608d190c799a7d215b599f8fdd8b18a23c3fc3a82c0cb028579e7b34226c6601527efa3544f2e455fedabd302c2dfd383f78cfb9e7a596f8c3a2076aa4deaefe1f5cbbcfd7247747af387fad274a4df7a42aafeb4c023ce2d84b872a5c8dba72f31fea9b3e81b5686a92fe758171c180756336a23a44926b463007fb20c2c8b8aaff0d726d51c9ef9f9d32dff52083f7dcf2d24902920115ad2b639f67e4cb8873d66dca42757334579251bbf6616355e5562a6c159a31edd8cac966c4f24caa5dde2b4b0154f14b530db3354c03a829652c65235932074578a4a8a2f6cabcb892e3e6a297e382317063f90c86a615ae1460fed91c3fc6d76a4001fc63cfa17643ee2d7e2ae7bd6844a0fa9201e98bb7ea05068034a841921a49a0b56054e6871393068fea7b95d40a31c186c9ecedbe07b5cfe72f44a643784af8b3ba8934accaf122b4ea333002535893ae8dcd3be242261a0247c176a5b0ce9b932fbb00339190646aae8ea9aaa74b65b4628272107ce08bcbf00fd1a54d1b33af5bb05841765eae748c44b06d2aef1179ffc30875a55ba198856bc84cf9ee2fc70ee9bd235cc625bd9465522b6f38e061b4d5c08930b9e387a1e0977bb673cbb240eaa6c7b0beff50ff0b157a94f86e6f1e079386bbf5707f6dd6253b5688a07052553bfb31c6f5e892283d2f37cea9585160b0ddfaace590c99ec60ff5046b1b4ec5a10124e799c40b16722342d0ca70c08e700155604a43ce5e8e25896497a0cda621b4b6191deeafb0c732ad5809a6ae95e375339e6b4165cdcce81726643cb0aae6aafa1d850a9a3c634d85ba66a2a1d5cfb7460e78ec5c79fc3b50f0dce3c40864c10e6dc8872f541fe066584d05c81ae2192fb367264c340d50682c314584fa86f8ec9f64bd6c530c4ae4b138fa141ca9842a79459dfe9885a8eae0b713160537efbaeaf644b73675e63d38648ad0fb3dee4469eb971b9c123267de83b3663b6e538e20ba61449c7fafca22b7f632159e1d3905fa896bce7701d23fb538ab3f3ff8b0dd1c494a1cbb4db76232d3b0a30a7e757dc13121667ea74fceb2c1295b5a45da9fe9924a61ee83bbde8c6e8dab9dc97e16c80f61b0716ea8de9e3f74473ade2e8ceaf1d5cced2f27a040204ae84a3218cf94e5fea72a12ca26f2c1240914b4e6ac64125b73d08ff9aece8f609a2aae6e7b8a91664c0f9fb93959787c9c8bd0fc9e408fd4f8459b101befe5da0398287a84f5c0a11c1ab7509254586a30805e20d4c565f9e54a7dcda8643a0df3e399e836e565a69db19f654a199246e44ea993ab4a03505827ab5e3215138448ef4b54815c3872b3f67ef3a68e99f7e663c9ed2d53fa23c8b45360a94a8f682cff127d86b57c97e0aceda648d4fd3de84f3332ded0bb2bd8f3161c6cc58b83bc6e2239e7d48642a8886fb155cf199c50ca9cd7db3aa44ac2444e01cd0a64d2f4b111f7d79f0ef22c438d1873d443ce9c88dbd4c6d372608bbc3a1e9dea81e59103fc3d6c694e09267b03296e1b740ab98f0b374538a8bbc1d6929a5bd433515f770838022fd3c264c7a4a13e5ae0db83a44a2996b5c2ef278e1c7f60f8460151a49bde7f0d99dcf020eb14a1292d83ebe7075b0b6fede0e6cf30480a5038772e7048120bf9caa642a6b393ca3ae1592dae5780d7cefd007ccf67ce67407818be6ff83c05ba5c21cb26c5a64a732a127b71244b472079d710b693b8a055278d14476028114523dd0de99a8e1b8e2e65ce45e6820e74a51b4ffa8a778782a36a7e3f0a700c821825466418156158638b71445d843653e3c719c4e25c39e055f48494c81523a33fa93f5f99e20b3b21030b64cbfdf2026bde856f50c7fe0f4cb9994eaab90343f84d584f542e34bb19a8a43c61375c7f7634b616edfadb1a2f9a13767c2a97814b70390c39ec50f599a2bcff2560404ddf09fa53c04f55234c6d43ace9f8b929fd7ce9de0b2e9a268a2b8f0d567675e3d9647b6a3c8231cfb1a04839eacbc2b4208c9bb5c8c70213778a9983d69f37cbc5ee0563450ff36bdc9f1297c9cab6d27d7ca8b53487d6ed3c53bf94d690c84780a5be5b719fc0b9188f986978e07c9c32f4d5c5ea291895d42b3b52b1bcae06d2a6bc17e6d0260e6ac35400ebbeb2e0a6550433b1b5b3f30dbe0b1ae073826d1b1b8f30ee565594fd92fac4ee1439dc5d610f507862a37891c8c5d90ea9aa9cbd13caeb6303ebf4d7ede410ac36926669e0660fbbedf68cbd45f12529a7bd9a84686949526300c24ef3e0248c63568036a1589d1de3def527fe2d84af464795991bb606854ef38b7b42fea4622614a01a528926145fd7aa58b58b1eaa185bc1d0cc00a92a729098a9823f10fb0c55758d4df7613fe01c2a8ff434845729f80a2d78139ce1201f0679cc3522e6c1a1814873f6004832ff35f2e7c72af7910a28544578c048af9efc7d45d36f428475c1e357f3f25dd72628aed7ae25b4fefe468eefe30a39b6a1b873411252c41578da1c89cc65e15fa4d1ae11f4af64b26ecf79846547e56aac81dccc6e45fdff4996be06d11e6bb3852b16343453ac4598149e83cce55ae5a4084ff8575fba89062d6fb0aa9741847b583bf1c44409b7eacc6718af598f76a6cddd82f7a7b8c06d5e89d8b12bdc382135f4480a0622b32fc1dda8e96be43f9ffff4de4ec3e7f51245905ab4c3dccc0f6bdbf06db765d40abe9b616a23951539db90121dc76088f4b766ea8ce7f2039adf7df981343ef6b7d016635bb565fb054d2178fcfa6c00ca769a805abfad620ac2b99f771fd006182ffc1be443ad483099aaf3b683e6b461ec0ea7baafee30337eb7ac659a7a8b1bd5f7a3dc31305a813e91cb75220a8f24fb8a55afc9f3245e860f9af2d795f137fac0421fc9af48dff607c2c4a76c9dbe2a5adb7bb2fff2eff5d0ee27f39c90189e8449c839c1f61f1b8337f2d77c30e302c33e3bf27a783f822f32c97489e5ebb43c2e68d1f51dcf13ee4529ed512496d4cd79d8693cf0acf49aff5108a2ec76b7ba64c4302ac04e0c3d61dd1133372f469b62584e782b6c66c2ffc567d0f0efc9ea14a97be46c6a474cf9b0eaee028b7e363b8ed69bee15f816984d807cb55ac56268c7b561351516ef42f2095c9e96530ca91025ad225c977de619b0d9ee779d0b66ed1a34ff2cdf72fc4758f6cedc45a75cc56076f620329d18c266bfbab2d9e7f219dabfb9c53ac20aef4dd981b853e0ac652a7e24b97052a8bf3b323fa764fadb6e7c27a6fe98d62ec2c706f5af372bb8e9b86d3cd54235854bfb32c754398c4b594667b44a22e5c96933cbdd59d8929d4333b557d5fc50b0aa2824da5b47f9df7c66d8f377aeb16aee78a7ca7fc47b82d78ce31f8f5483b069307345bc969bec08e497344e558fa97ce910920ac75e22ae68db96307bf6bc1decd9361974cf01f15a631d41b450c4f0e99b66516ecc2140eddce9953a994da392b5b9327aea3a5154c39ac3240b005a901704fc3b40a851fee054c19757e4f2fc6ca4adf8c99e59ee34ad563a5cb72d869ae8db9220e06ec00a90d47dda81f3825086df7a98691793d04376fa4d527cf52faea6d56884dbfb9a74492f50a3edb0b320644a7bb3d74</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>encryptAsDiary</tag>
-      </tags>
   </entry>
 </search>
